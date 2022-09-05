@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "~/lief/LIEF-0.13.0-Linux-x86_64/include",
+                "${workspaceFolder}/common",
+                "/usr/include/c++/9",
+                "/usr/include/x86_64-linux-gnu/c++/9"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c17",
+            "intelliSenseMode": "linux-clang-x64"
+        }
+    ],
+    "version": 4
+}
