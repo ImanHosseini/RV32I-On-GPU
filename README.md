@@ -1,8 +1,8 @@
 # CRV2
 ## Prereq
 ### RISCV stuff
-https://github.com/riscv-collab/riscv-gnu-toolchain
-https://github.com/riscv-software-src/riscv-isa-sim
+https://github.com/riscv-collab/riscv-gnu-toolchain </br>
+https://github.com/riscv-software-src/riscv-isa-sim </br>
 https://github.com/riscv-software-src/riscv-pk </br>
 I config'ed them with the default prefix of "/opt/riscv" -> then add the bin dir to path.
 ### LIEF for ELF stuff
