@@ -10,7 +10,7 @@
                 "/usr/include/x86_64-linux-gnu/c++/9"
             ],
             "defines": [],
-            "compilerPath": "/usr/bin/clang",
+            "compilerPath": "/usr/bin/gcc",
             "cStandard": "c17",
             "intelliSenseMode": "linux-clang-x64"
         }

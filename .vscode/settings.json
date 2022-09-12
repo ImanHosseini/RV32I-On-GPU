@@ -54,6 +54,16 @@
         "thread": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "bit": "cpp"
+        "bit": "cpp",
+        "__bit_reference": "cpp",
+        "__functional_base": "cpp",
+        "__node_handle": "cpp",
+        "bitset": "cpp",
+        "__memory": "cpp",
+        "filesystem": "cpp",
+        "locale": "cpp",
+        "__config": "cpp",
+        "compare": "cpp",
+        "__nullptr": "cpp"
     }
 }

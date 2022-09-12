@@ -1,0 +1,66 @@
+
+t2:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00000000 <_exit>:
+   0:	fe010113          	addi	x2,x2,-32
+   4:	00812e23          	sw	x8,28(x2)
+   8:	02010413          	addi	x8,x2,32
+   c:	fea42623          	sw	x10,-20(x8)
+  10:	fec42503          	lw	x10,-20(x8)
+  14:	05d00893          	addi	x17,x0,93
+  18:	00000073          	ecall
+  1c:	00000013          	addi	x0,x0,0
+  20:	01c12403          	lw	x8,28(x2)
+  24:	02010113          	addi	x2,x2,32
+  28:	00008067          	jalr	x0,0(x1)
+
+0000002c <_start>:
+  2c:	fd010113          	addi	x2,x2,-48
+  30:	02112623          	sw	x1,44(x2)
+  34:	02812423          	sw	x8,40(x2)
+  38:	03010413          	addi	x8,x2,48
+  3c:	00c00793          	addi	x15,x0,12
+  40:	fef42623          	sw	x15,-20(x8)
+  44:	00900793          	addi	x15,x0,9
+  48:	fef42423          	sw	x15,-24(x8)
+  4c:	fe042223          	sw	x0,-28(x8)
+  50:	06c0006f          	jal	x0,bc <_start+0x90>
+  54:	fec42703          	lw	x14,-20(x8)
+  58:	00000793          	addi	x15,x0,0
+  5c:	40e787b3          	sub	x15,x15,x14
+  60:	00179793          	slli	x15,x15,0x1
+  64:	00078693          	addi	x13,x15,0
+  68:	fe842703          	lw	x14,-24(x8)
+  6c:	00070793          	addi	x15,x14,0
+  70:	00179793          	slli	x15,x15,0x1
+  74:	00e787b3          	add	x15,x15,x14
+  78:	00f687b3          	add	x15,x13,x15
+  7c:	fef42023          	sw	x15,-32(x8)
+  80:	fec42703          	lw	x14,-20(x8)
+  84:	00070793          	addi	x15,x14,0
+  88:	00179793          	slli	x15,x15,0x1
+  8c:	00e78733          	add	x14,x15,x14
+  90:	fe842783          	lw	x15,-24(x8)
+  94:	00179793          	slli	x15,x15,0x1
+  98:	40f707b3          	sub	x15,x14,x15
+  9c:	fcf42e23          	sw	x15,-36(x8)
+  a0:	fe042783          	lw	x15,-32(x8)
+  a4:	fef42623          	sw	x15,-20(x8)
+  a8:	fdc42783          	lw	x15,-36(x8)
+  ac:	fef42423          	sw	x15,-24(x8)
+  b0:	fe442783          	lw	x15,-28(x8)
+  b4:	00178793          	addi	x15,x15,1
+  b8:	fef42223          	sw	x15,-28(x8)
+  bc:	fe442703          	lw	x14,-28(x8)
+  c0:	00900793          	addi	x15,x0,9
+  c4:	f8e7d8e3          	bge	x15,x14,54 <_start+0x28>
+  c8:	00000513          	addi	x10,x0,0
+  cc:	f35ff0ef          	jal	x1,0 <_exit>
+  d0:	00000013          	addi	x0,x0,0
+  d4:	02c12083          	lw	x1,44(x2)
+  d8:	02812403          	lw	x8,40(x2)
+  dc:	03010113          	addi	x2,x2,48
+  e0:	00008067          	jalr	x0,0(x1)

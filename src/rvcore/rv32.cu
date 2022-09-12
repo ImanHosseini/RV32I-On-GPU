@@ -1,6 +1,7 @@
 #include "util.cuh"
 
 // RISC-V impl is based on https://github.com/PiMaker/rvc/tree/master/src
+// NEWLIB SYSCALL table: https://github.com/riscvarchive/riscv-newlib/blob/riscv-newlib-3.2.0/libgloss/riscv/machine/syscall.h
 
 // #######################################
 // ###  Instruction Formats: IBJRSU
@@ -43,52 +44,138 @@ __device__ inline uint32_t sxtn(uint32_t x, uint32_t b){
     return (x ^ m) - m;
 }
 
-// #######################################
-// ###  Memory Access Funcs
-// #######################################
-#ifdef MMU
-__device__ bool read8(uint32_t addr, uint8_t& value){
-    // Not implemented yet!
-}
-#else
-__device__ bool read8(uint32_t addr, uint8_t& value, core_status_t& cstatus){
-    return;
-}
-#endif
-
 // For MMU?
 // __constant__ int page_cnt;
 // __constant__ int page_size;
 __constant__ uint32_t core_mem_size;
 // __constant__ uint32_t core_per_grid;
-#define MEMORY_SLACK 1024*4
+#define MEMORY_SLACK 1024*1024*64
 
-void set_cms(uint32_t* cms){
-    printf("V:%u\n",*cms);
-    ccE(cudaMemcpyToSymbol(core_mem_size, cms, sizeof(uint32_t)));
+// #######################################
+// ###  Memory Access Funcs
+// #######################################
+#ifdef MMU
+__device__ bool read8(uint32_t addr, uint8_t& value, uint8_t* mem, core_status_t& cstatus){
+    // Not implemented yet!
 }
 
-// void initialize(REG* &regfile, REG* &pcfile, core_status_t* &svec, cudaStream_t* streams, int np, int nq){
-//     size_t free_memory, total_memory;
-//     ccE(cudaMemGetInfo(&free_memory,&total_memory));
-//     free_memory -= MEMORY_SLACK;
-//     uint32_t cms = (free_memory/ np) - (sizeof(REG)+1)*NUM_OF_REGS - sizeof(core_status_t);
-//     printf("|Q: %d|Np: %d|Mem/Core: 0x%x|\n", nq, np, cms);
-//     ccE(cudaMemcpyToSymbol(core_mem_size, &cms, sizeof(uint32_t)));
-//     // ccE(cudaMalloc());
-// }
-
-void qinit(REG* &regfile, REG* &pcfile, core_status_t* &svec, cudaStream_t s, int mpc)
-{
-    
+__device__ bool read16(uint32_t addr, uint16_t& value, uint8_t* mem, core_status_t& cstatus){
+    // Not implemented yet!
 }
 
-uint32_t calc_mpc(int np, int nq){
+__device__ bool read32(uint32_t addr, uint32_t& value, uint8_t* mem, core_status_t& cstatus){
+    // Not implemented yet!
+}
+
+__device__ bool write8(uint32_t addr, uint8_t value, uint8_t* mem, core_status_t& cstatus){
+    // Not implemented yet!
+}
+
+__device__ bool write16(uint32_t addr, uint16_t value, uint8_t* mem, core_status_t& cstatus){
+    // Not implemented yet!
+}
+
+__device__ bool write32(uint32_t addr, uint32_t value, uint8_t* mem, core_status_t& cstatus){
+    // Not implemented yet!
+}
+#else
+__device__ bool read8(uint32_t addr, uint8_t& value, uint8_t* mem, core_status_t& cstatus){
+    if(addr >= core_mem_size){
+        cstatus.state = ILG_MEMRD;
+        cstatus.addr = addr;
+        asm("exit;");
+    }
+    value = mem[addr];
+    return;
+}
+
+__device__ bool read16(uint32_t addr, uint16_t& value, uint8_t* mem, core_status_t& cstatus){
+    if((addr + 1) >= core_mem_size){
+        cstatus.state = ILG_MEMRD;
+        cstatus.addr = addr;
+        asm("exit;");
+    }
+    value = *((uint16_t*)(mem +addr));
+    return;
+}
+
+__device__ bool read32(uint32_t addr, uint32_t& value, uint8_t* mem, core_status_t& cstatus){
+    if((addr + 3) >= core_mem_size){
+        cstatus.state = ILG_MEMRD;
+        cstatus.addr = addr;
+        asm("exit;");
+    }
+    value = *((uint32_t*)(mem +addr));
+    return;
+}
+
+__device__ bool write8(uint32_t addr, uint8_t value, uint8_t* mem, core_status_t& cstatus){
+    if(addr >= core_mem_size){
+        cstatus.state = ILG_MEMWR;
+        cstatus.addr = addr;
+        asm("exit;");
+    }
+    mem[addr] = value;
+    return;
+}
+
+__device__ bool write16(uint32_t addr, uint16_t value, uint8_t* mem, core_status_t& cstatus){
+    if((addr + 1) >= core_mem_size){
+        cstatus.state = ILG_MEMWR;
+        cstatus.addr = addr;
+        asm("exit;");
+    }
+    *((uint16_t*)(mem + addr)) = value;
+    return;
+}
+
+__device__ bool write32(uint32_t addr, uint32_t value, uint8_t* mem, core_status_t& cstatus){
+    if((addr + 1) >= core_mem_size){
+        cstatus.state = ILG_MEMWR;
+        cstatus.addr = addr;
+        asm("exit;");
+    }
+    *((uint8_t*)(mem + addr)) = value;
+    return;
+}
+#endif
+
+/* SYSCALL ARG PASSING: (a0 == x10)
+    li    a0, 1               # argument that is used by the syscall
+    li    a1, 0               # unused arguments
+    li    a2, 0
+    li    a3, 0
+    li    a4, 0
+    li    a5, 0
+    li    a7, 93              # exit syscall number
+*/
+
+__device__ inline void shandler(core_status_t& cstatus, REG* regs){
+    switch(cstatus.addr){
+        case SYS_exit:{
+            cstatus.state = EXITED;
+            cstatus.addr = regs[10];
+            return;
+        }
+        default:{
+            return;
+        }
+    }
+}
+
+void set_cms(int32_t* cms){
+    printf("V:%d\n",*cms);
+    ccE(cudaMemcpyToSymbol(core_mem_size, cms, sizeof(int32_t)));
+}
+
+int32_t calc_mpc(int np, int nq){
     size_t free_memory, total_memory;
     ccE(cudaMemGetInfo(&free_memory,&total_memory));
     free_memory -= MEMORY_SLACK;
-    uint32_t mpc = (free_memory/ np) - (sizeof(REG)+1)*NUM_OF_REGS - sizeof(core_status_t);
-    mpc = mpc - (mpc%256);
+    int32_t mpc = (free_memory/ np) - (sizeof(REG)+1)*NUM_OF_REGS - sizeof(core_status_t);
+    mpc = mpc - (mpc%4);
+    printf("AVAIL: %zx | MPC: %x\n", free_memory+MEMORY_SLACK, mpc);
+    // printf("DELTA: %d\n", (int32_t)free_memory - (int32_t)(np*mpc));
     printf("|Q: %d|Np: %d|Mem/Core: 0x%x|\n", nq, np, mpc);
     ccE(cudaMemcpyToSymbol(core_mem_size, &mpc, sizeof(uint32_t)));
     return mpc;
@@ -102,7 +189,9 @@ __device__ inline void stepN(REG *regs, REG& pc, uint8_t *mem, int tid, core_sta
     // what if pc accesses out of bounds memory?
     uint32_t rd, rs1, rs2, rs3, imm;
     // REG &pc = *(pcfile + tid);
-    uint32_t insn = *((uint32_t *)(mem + pc));
+    // printf("ZZZZZZ:%u\n", core_mem_size);
+    uint32_t insn;
+    read32(pc, insn, mem, cstatus);
     uint32_t insn_masked = insn & 0x0000007f;
     switch (insn_masked)
     {
@@ -444,25 +533,185 @@ other:
         // RV32I lb
         FMT_I
         DPRINTK("lb x%d, x%x, 0x%x\n", rd, rs1, imm);
-        // MEM-ACCESS
+        uint32_t addr = rs1 + imm;
+        uint8_t byte;
+        read8(addr, byte, mem, cstatus); 
+        regs[rd] = sxtn(byte ,8); 
         return;
     }
+    case 0x00004003:{
+        // RV32I lbu
+        FMT_I
+        DPRINTK("lbu x%d, x%x, 0x%x\n", rd, rs1, imm);
+        uint32_t addr = rs1 + imm;
+        uint8_t byte;
+        read8(addr, byte, mem, cstatus); 
+        regs[rd] = byte;
+        return;
+    }
+    case 0x00001003:{
+        // RV32I lh
+        FMT_I
+        DPRINTK("lh x%d, x%x, 0x%x\n", rd, rs1, imm);
+        uint32_t addr = rs1 + imm;
+        uint16_t hword;
+        read16(addr, hword, mem, cstatus); 
+        regs[rd] = sxtn(hword, 16);
+        return;
+    }
+    case 0x00005003:{
+        // RV32I lhu
+        FMT_I
+        DPRINTK("lhu x%d, x%x, 0x%x\n", rd, rs1, imm);
+        uint32_t addr = rs1 + imm;
+        uint16_t hword;
+        read16(addr, hword, mem, cstatus); 
+        regs[rd] = hword;
+        return;
+    }
+    case 0x00002003:{
+        // RV32I lw
+        FMT_I
+        DPRINTK("lw x%d, x%x, 0x%x\n", rd, rs1, imm);
+        uint32_t addr = rs1 + imm;
+        uint32_t word;
+        read32(addr, word, mem, cstatus); 
+        regs[rd] = word;
+        return;
+    }
+    case 0x00006013:{
+        // RV32I ori
+        FMT_I
+        DPRINTK("ori x%d, x%x, 0x%x\n", rd, rs1, imm);
+        regs[rd] = regs[rs1] | imm;
+        return;
+    }
+    case 0x00004013:{
+        // RV32I xori
+        FMT_I
+        DPRINTK("xori x%d, x%x, 0x%x\n", rd, rs1, imm);
+        regs[rd] = regs[rs1] ^ imm;
+        return;
+    }
+    case 0x00000023:{
+        // RV32I sb
+        FMT_S
+        DPRINTK("sb x%d, x%x, 0x%x\n", rs1, rs2, imm);
+        uint32_t addr = rs1 + imm;
+        write8(addr, (uint8_t)regs[rs2], mem, cstatus);
+        return;
+    }
+    case 0x00001023:{
+        // RV32I sh
+        FMT_S
+        DPRINTK("sh x%d, x%x, 0x%x\n", rs1, rs2, imm);
+        uint32_t addr = rs1 + imm;
+        write16(addr, (uint16_t)regs[rs2], mem, cstatus);
+        return;
+    }
+    case 0x00002023:{
+        // RV32I sw
+        FMT_S
+        DPRINTK("sw x%d, x%x, 0x%x\n", rs1, rs2, imm);
+        uint32_t addr = rs1 + imm;
+        write32(addr, regs[rs2], mem, cstatus);
+        INC_PC
+        return;
+    }
+    case 0x00002013:{
+        // RV32I slti
+        FMT_I
+        DPRINTK("slti x%d, x%x, 0x%x\n", rd, rs1, imm);
+        if((int32_t) regs[rs1] < (int32_t) imm){
+            regs[rd] = 0x1;
+        }else{
+            regs[rd] = 0x0;
+        }
+        return;
+    }
+    case 0x00003013:{
+        // RV32I sltiu
+        FMT_I
+        DPRINTK("sltiu x%d, x%x, 0x%x\n", rd, rs1, imm);
+        if(regs[rs1] < imm){
+            regs[rd] = 0x1;
+        }else{
+            regs[rd] = 0x0;
+        }
+        return;
+    }
+
     default:{
 
     }
+    }
+
+    insn_masked = insn & 0xfc00707f;
+    {
+        FMT_R
+        switch(insn_masked){
+            case 0x00001013:{
+                // RV32I slli
+                DPRINTK("slli x%d, x%d, x%d\n", rd, rs1, rs2);
+                regs[rd] = regs[rs1] << rs2;
+                return;
+            }
+            case 0x40005013:{
+                // RV32I srai
+                DPRINTK("srai x%d, x%d, x%d\n", rd, rs1, rs2);
+                uint32_t msr = regs[rs1] & 0x80000000;
+                regs[rd] = msr ? ~(~regs[rs1] >> rs2) : regs[rs1] >> rs2;
+                return;
+            }
+            case 0x00005013:{
+                // RV32I srli
+                DPRINTK("srli x%d, x%d, x%d\n", rd, rs1, rs2);
+                regs[rd] = regs[rs1] >> rs2;
+                return;
+            }
+        }
+    }
+
+    insn_masked = insn & 0xffffffff;
+    switch(insn_masked){
+        case 0x00100073:{
+            // RV32I ebreak
+            DPRINTK("ebreak\n");
+            cstatus.state = EBREAK;
+            cstatus.addr = pc;
+            return;
+        }
+        case 0x00000073:{
+            // RV32I ecall
+            DPRINTK("ecall with x17/a7=%d\n", regs[17]);
+            cstatus.state = ECALL;
+            cstatus.addr = regs[17];
+            return;
+        }
     }
 
     return;
 }
 
 __launch_bounds__(32)
-__global__ void step(REG *regfile, REG *pcfile, uint8_t *gmem, core_status_t *svec){
+__global__ void step(REG *regfile, REG *pcfile, uint8_t *gmem, core_status_t *svec, uint32_t maxstep){
     int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    printf("CMS:%d\n",core_mem_size);
+    // printf("CMS:%d\n",core_mem_size);
     REG *regs = regfile + tid * NUM_OF_REGS;
     // what if pc accesses out of bounds memory?
     REG &pc = *(pcfile + tid);
     uint8_t* mem = gmem + tid * core_mem_size; 
     core_status_t& cstatus = *(svec + tid);  
-    stepN(regfile, pc, mem, tid, cstatus);
+    uint32_t iter = 0;
+    if(maxstep == 0){
+        // This is probably unnecessary 
+        while(cstatus.state == RUNNING){
+            stepN(regs, pc, mem, tid, cstatus);
+        }
+    }else{
+        for(; iter < maxstep; iter++){
+            stepN(regs, pc, mem, tid, cstatus);
+        }
+    }
+    DPRINTK("CST: %d\n", cstatus.state);
 }

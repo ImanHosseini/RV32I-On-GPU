@@ -2,14 +2,22 @@ LIEF_HOME ?= $(HOME)/lief/LIEF-0.13.0-Linux-x86_64/
 
 # TODO: make this makefile less crappy
 # maybe have Makefiles in different dirs? how does that work?
+# get gpu CC: nvidia-smi --query-gpu=compute_cap --format=csv
+# outputs: compute_cap\n8.6
+# requires CUDA 11.6+
 
-.PHONY: r0 run-tests run-t0 build-tests build-t0
+.PHONY: r0 run-tests run-t0 build-tests build-t0 getCCAP
 
-r0:
-	nvcc ./src/apps/crvr.cu ./src/rvcore/rv32.cu ./common/util.cu -DDBG -DKDBG0 -I./include -I./common -I$(LIEF_HOME)include -L$(LIEF_HOME)lib -l:libLIEF.a -arch=sm_75 -o ./bin/r0
+# `sed` is due to moyix influence :)
+getCCAP: 
+	$(eval CCAP := sm_$(shell nvidia-smi --query-gpu=compute_cap --format=csv | tail -n 1 | sed 's/\.//'))
+	echo $(CCAP)
 
-r1:
-	nvcc -g ./src/apps/r1.cu ./src/rvcore/rv32.cu ./common/util.cu -DDBG -DKDBG0 -I./include -I./common -I$(LIEF_HOME)include -L$(LIEF_HOME)lib -l:libLIEF.a -arch=sm_75 -o ./bin/r1
+r0: getCCAP
+	nvcc ./src/apps/crvr.cu ./src/rvcore/rv32.cu ./common/util.cu -DDBG -DKDBG0 -I./include -I./common -I$(LIEF_HOME)include -L$(LIEF_HOME)lib -l:libLIEF.a -arch=$(CCAP) -o ./bin/r0
+
+r1: getCCAP
+	nvcc -G ./src/apps/r1.cu ./src/rvcore/rv32.cu ./common/util.cu -DDBG -DKDBG0 -I./include -I./common -I$(LIEF_HOME)include -L$(LIEF_HOME)lib -l:libLIEF.a -arch=$(CCAP) -o ./bin/r1
 
 run-tests: run-t0
 

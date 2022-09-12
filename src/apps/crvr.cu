@@ -7,10 +7,9 @@
 #include <LIEF/logging.hpp>
 
 using namespace LIEF::ELF;
-const char* r0path = "/home/iman/projs2/CRV2/ta/level0/t1";
+const char* r0path = "./ta/level0/t1";
 
-extern __global__ void step(REG *regfile, REG *pcfile, uint8_t *gmem, core_status_t *svec);
-
+// extern __global__ void step(REG *regfile, REG *pcfile, uint8_t *gmem, core_status_t *svec, uint32_t maxstep);
 int main(int argc, char** argv ){
     LIEF::logging::set_level(LIEF::logging::LOGGING_LEVEL::LOG_DEBUG);
     std::unique_ptr<const Binary> binary = std::unique_ptr<const Binary>{Parser::parse(r0path)};
@@ -37,7 +36,7 @@ int main(int argc, char** argv ){
     uint32_t entrypt = (uint32_t)binary->entrypoint();
     initPC<<<1,32>>>(pcfile, entrypt);
     for(int i = 0; i < 6; i++){
-        step<<<1,32>>>(regfile, pcfile, mem);
+        step<<<1,32>>>(regfile, pcfile, mem, nullptr, 1);
     }
     ccE(cudaDeviceSynchronize());
     // __global__ void step(REG* regfile, REG* pcfile, uint8_t* mem)
