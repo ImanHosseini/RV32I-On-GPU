@@ -135,7 +135,7 @@ __device__ bool write32(uint32_t addr, uint32_t value, uint8_t* mem, core_status
         cstatus.addr = addr;
         asm("exit;");
     }
-    *((uint8_t*)(mem + addr)) = value;
+    *((uint32_t*)(mem + addr)) = value;
     return;
 }
 #endif
@@ -442,7 +442,7 @@ other:
     case 0x00000013:{
         // RV32I addi
         FMT_I
-        DPRINTK("addi x%d, x%d, 0x%x\n", rd, rs1, imm);
+        DPRINTK("addi x%d, x%d, %d\n", rd, rs1, (int32_t)imm);
         regs[rd] = (int32_t) regs[rs1] + (int32_t) imm;
         INC_PC
         return;
@@ -527,93 +527,103 @@ other:
         DPRINTK("jalr x%d, x%x, 0x%x\n", rd, rs1, imm);
         regs[rd] = pc + 4;
         pc = regs[rs1] + imm;
+        INC_PC
         return;
     }
     case 0x00000003:{
         // RV32I lb
         FMT_I
         DPRINTK("lb x%d, x%x, 0x%x\n", rd, rs1, imm);
-        uint32_t addr = rs1 + imm;
+        uint32_t addr = regs[rs1] + imm;
         uint8_t byte;
         read8(addr, byte, mem, cstatus); 
         regs[rd] = sxtn(byte ,8); 
+        INC_PC
         return;
     }
     case 0x00004003:{
         // RV32I lbu
         FMT_I
         DPRINTK("lbu x%d, x%x, 0x%x\n", rd, rs1, imm);
-        uint32_t addr = rs1 + imm;
+        uint32_t addr = regs[rs1] + imm;
         uint8_t byte;
         read8(addr, byte, mem, cstatus); 
         regs[rd] = byte;
+        INC_PC
         return;
     }
     case 0x00001003:{
         // RV32I lh
         FMT_I
         DPRINTK("lh x%d, x%x, 0x%x\n", rd, rs1, imm);
-        uint32_t addr = rs1 + imm;
+        uint32_t addr = regs[rs1] + imm;
         uint16_t hword;
         read16(addr, hword, mem, cstatus); 
         regs[rd] = sxtn(hword, 16);
+        INC_PC
         return;
     }
     case 0x00005003:{
         // RV32I lhu
         FMT_I
         DPRINTK("lhu x%d, x%x, 0x%x\n", rd, rs1, imm);
-        uint32_t addr = rs1 + imm;
+        uint32_t addr = regs[rs1] + imm;
         uint16_t hword;
         read16(addr, hword, mem, cstatus); 
         regs[rd] = hword;
+        INC_PC
         return;
     }
     case 0x00002003:{
         // RV32I lw
         FMT_I
-        DPRINTK("lw x%d, x%x, 0x%x\n", rd, rs1, imm);
-        uint32_t addr = rs1 + imm;
+        DPRINTK("lw x%d, x%x, %d\n", rd, rs1, (int32_t)imm);
+        uint32_t addr = regs[rs1] + imm;
         uint32_t word;
         read32(addr, word, mem, cstatus); 
         regs[rd] = word;
+        INC_PC
         return;
     }
     case 0x00006013:{
         // RV32I ori
         FMT_I
-        DPRINTK("ori x%d, x%x, 0x%x\n", rd, rs1, imm);
+        DPRINTK("ori x%d, x%d, 0x%x\n", rd, rs1, imm);
         regs[rd] = regs[rs1] | imm;
+        INC_PC
         return;
     }
     case 0x00004013:{
         // RV32I xori
         FMT_I
-        DPRINTK("xori x%d, x%x, 0x%x\n", rd, rs1, imm);
+        DPRINTK("xori x%d, x%d, 0x%x\n", rd, rs1, imm);
         regs[rd] = regs[rs1] ^ imm;
+        INC_PC
         return;
     }
     case 0x00000023:{
         // RV32I sb
         FMT_S
         DPRINTK("sb x%d, x%x, 0x%x\n", rs1, rs2, imm);
-        uint32_t addr = rs1 + imm;
+        uint32_t addr = regs[rs1] + imm;
         write8(addr, (uint8_t)regs[rs2], mem, cstatus);
+        INC_PC
         return;
     }
     case 0x00001023:{
         // RV32I sh
         FMT_S
-        DPRINTK("sh x%d, x%x, 0x%x\n", rs1, rs2, imm);
-        uint32_t addr = rs1 + imm;
+        DPRINTK("sh x%d, x%d, 0x%x\n", rs1, rs2, imm);
+        uint32_t addr = regs[rs1] + imm;
         write16(addr, (uint16_t)regs[rs2], mem, cstatus);
+        INC_PC
         return;
     }
     case 0x00002023:{
         // RV32I sw
         FMT_S
-        DPRINTK("sw x%d, x%x, 0x%x\n", rs1, rs2, imm);
-        uint32_t addr = rs1 + imm;
+        DPRINTK("sw x%d, x%d, %d\n", rs1, rs2, (int32_t)imm);
+        uint32_t addr = regs[rs1] + imm;
         write32(addr, regs[rs2], mem, cstatus);
         INC_PC
         return;
@@ -621,26 +631,27 @@ other:
     case 0x00002013:{
         // RV32I slti
         FMT_I
-        DPRINTK("slti x%d, x%x, 0x%x\n", rd, rs1, imm);
+        DPRINTK("slti x%d, x%d, 0x%x\n", rd, rs1, imm);
         if((int32_t) regs[rs1] < (int32_t) imm){
             regs[rd] = 0x1;
         }else{
             regs[rd] = 0x0;
         }
+        INC_PC
         return;
     }
     case 0x00003013:{
         // RV32I sltiu
         FMT_I
-        DPRINTK("sltiu x%d, x%x, 0x%x\n", rd, rs1, imm);
+        DPRINTK("sltiu x%d, x%d, 0x%x\n", rd, rs1, imm);
         if(regs[rs1] < imm){
             regs[rd] = 0x1;
         }else{
             regs[rd] = 0x0;
         }
+        INC_PC
         return;
     }
-
     default:{
 
     }
@@ -654,6 +665,7 @@ other:
                 // RV32I slli
                 DPRINTK("slli x%d, x%d, x%d\n", rd, rs1, rs2);
                 regs[rd] = regs[rs1] << rs2;
+                INC_PC
                 return;
             }
             case 0x40005013:{
@@ -661,12 +673,14 @@ other:
                 DPRINTK("srai x%d, x%d, x%d\n", rd, rs1, rs2);
                 uint32_t msr = regs[rs1] & 0x80000000;
                 regs[rd] = msr ? ~(~regs[rs1] >> rs2) : regs[rs1] >> rs2;
+                INC_PC
                 return;
             }
             case 0x00005013:{
                 // RV32I srli
                 DPRINTK("srli x%d, x%d, x%d\n", rd, rs1, rs2);
                 regs[rd] = regs[rs1] >> rs2;
+                INC_PC
                 return;
             }
         }
