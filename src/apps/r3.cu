@@ -67,7 +67,6 @@ void tX(cudaStream_t s, uint32_t nc, uint32_t mpc, uint32_t pc0, mmc_t mmc, uint
         ccE(cudaMemsetAsync(svec, 0x0, sizeof(core_status_t)*nc, s));
         step<<<nc/32, 32, 0, s>>>(regfile, pcfile, gmem, svec, 0);
     }
-    delete[] pkts;
     // print statuses
     if(print_final_status){
         core_status_t* svec_h = (core_status_t*)malloc(sizeof(core_status_t) * nc);
@@ -77,6 +76,7 @@ void tX(cudaStream_t s, uint32_t nc, uint32_t mpc, uint32_t pc0, mmc_t mmc, uint
         }
     }
     ccE(cudaStreamSynchronize(s));
+    delete[] pkts;
 }
 
 
