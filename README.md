@@ -4,6 +4,10 @@
 https://github.com/riscv-collab/riscv-gnu-toolchain </br>
 https://github.com/riscv-software-src/riscv-isa-sim </br>
 https://github.com/riscv-software-src/riscv-pk </br>
+dont forget:
+```
+../configure --prefix=$RISCV --host=riscv64-unknown-elf --with-arch=rv32i
+```
 I config'ed them with the default prefix of "/opt/riscv" -> then add the bin dir to path.
 ### LIEF for ELF stuff
 Get the lief SDK, notice this line in Makefile:
@@ -19,4 +23,5 @@ riscv64-unknown-elf-gcc -mabi=ilp32 -Wl,-Ttext=0x0 -nostdlib -march=rv32im -o t2
 spike --isa=rv32im pk t2
 riscv64-unknown-elf-gcc -mabi=ilp32 -Wl,-Ttext=0x0 -nostdlib -march=rv32im -o t2 t2.c
 riscv64-unknown-elf-objdump --disassembler-options=no-aliases -M numeric -d t2 > odump2.txt
+spike --isa=rv32imafc -d /opt/riscv/riscv32-unknown-elf/bin/pk t2
 ```

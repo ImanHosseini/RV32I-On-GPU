@@ -1,0 +1,17 @@
+
+t1:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00000000 <_start>:
+   0:	00100513          	addi	x10,x0,1
+   4:	00012197          	auipc	x3,0x12
+   8:	008001ef          	jal	x3,10 <lbl>
+   c:	00000073          	ecall
+
+00000010 <lbl>:
+  10:	00007237          	lui	x4,0x7
+  14:	00000513          	addi	x10,x0,0
+  18:	05d00893          	addi	x17,x0,93
+  1c:	00000073          	ecall

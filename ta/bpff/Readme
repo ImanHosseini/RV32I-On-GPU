@@ -1,0 +1,5 @@
+riscv64-unknown-elf-gcc -mabi=ilp32 -Wl,-Ttext=0x0 -nostdlib -march=rv32im -o bpff main.c
+riscv64-unknown-elf-gcc -mabi=ilp32 -Wl,-T./myrv.lds -nostdlib -march=rv32im -o bpff main.c
+riscv64-unknown-elf-readelf -a bpff > bpff.relf
+riscv64-unknown-elf-objdump -d bpff > bpff.odump
+see here: https://stackoverflow.com/questions/40884654/allocate-an-array-in-c-a-specific-location-using-linker-commands

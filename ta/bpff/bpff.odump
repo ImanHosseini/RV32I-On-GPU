@@ -1,0 +1,884 @@
+
+bpff:     file format elf32-littleriscv
+
+
+Disassembly of section .cuda_constant:
+
+00000000 <_exit>:
+   0:	fe010113          	addi	sp,sp,-32
+   4:	00812e23          	sw	s0,28(sp)
+   8:	02010413          	addi	s0,sp,32
+   c:	fea42623          	sw	a0,-20(s0)
+  10:	fec42503          	lw	a0,-20(s0)
+  14:	05d00893          	li	a7,93
+  18:	00000073          	ecall
+  1c:	00000013          	nop
+  20:	01c12403          	lw	s0,28(sp)
+  24:	02010113          	addi	sp,sp,32
+  28:	00008067          	ret
+
+0000002c <EXTRACT_BE_U_2>:
+  2c:	fe010113          	addi	sp,sp,-32
+  30:	00812e23          	sw	s0,28(sp)
+  34:	02010413          	addi	s0,sp,32
+  38:	fea42623          	sw	a0,-20(s0)
+  3c:	fec42783          	lw	a5,-20(s0)
+  40:	0007d783          	lhu	a5,0(a5)
+  44:	00078513          	mv	a0,a5
+  48:	01c12403          	lw	s0,28(sp)
+  4c:	02010113          	addi	sp,sp,32
+  50:	00008067          	ret
+
+00000054 <EXTRACT_BE_U_4>:
+  54:	fe010113          	addi	sp,sp,-32
+  58:	00812e23          	sw	s0,28(sp)
+  5c:	02010413          	addi	s0,sp,32
+  60:	fea42623          	sw	a0,-20(s0)
+  64:	fec42783          	lw	a5,-20(s0)
+  68:	0007a783          	lw	a5,0(a5)
+  6c:	00078513          	mv	a0,a5
+  70:	01c12403          	lw	s0,28(sp)
+  74:	02010113          	addi	sp,sp,32
+  78:	00008067          	ret
+
+0000007c <pcap_filter_with_aux_data>:
+  7c:	f9010113          	addi	sp,sp,-112
+  80:	06112623          	sw	ra,108(sp)
+  84:	06812423          	sw	s0,104(sp)
+  88:	06912223          	sw	s1,100(sp)
+  8c:	07212023          	sw	s2,96(sp)
+  90:	05312e23          	sw	s3,92(sp)
+  94:	07010413          	addi	s0,sp,112
+  98:	f8a42e23          	sw	a0,-100(s0)
+  9c:	f8b42c23          	sw	a1,-104(s0)
+  a0:	f8c42a23          	sw	a2,-108(s0)
+  a4:	f8d42823          	sw	a3,-112(s0)
+  a8:	f9c42783          	lw	a5,-100(s0)
+  ac:	00079663          	bnez	a5,b8 <pcap_filter_with_aux_data+0x3c>
+  b0:	fff00793          	li	a5,-1
+  b4:	5d40006f          	j	688 <pcap_filter_with_aux_data+0x60c>
+  b8:	00000493          	li	s1,0
+  bc:	00000913          	li	s2,0
+  c0:	f9c42783          	lw	a5,-100(s0)
+  c4:	ff878793          	addi	a5,a5,-8
+  c8:	f8f42e23          	sw	a5,-100(s0)
+  cc:	f9c42783          	lw	a5,-100(s0)
+  d0:	00878793          	addi	a5,a5,8
+  d4:	f8f42e23          	sw	a5,-100(s0)
+  d8:	f9c42783          	lw	a5,-100(s0)
+  dc:	0007d783          	lhu	a5,0(a5)
+  e0:	0b100713          	li	a4,177
+  e4:	00f76c63          	bltu	a4,a5,fc <pcap_filter_with_aux_data+0x80>
+  e8:	00279713          	slli	a4,a5,0x2
+  ec:	74c00793          	li	a5,1868
+  f0:	00f707b3          	add	a5,a4,a5
+  f4:	0007a783          	lw	a5,0(a5)
+  f8:	00078067          	jr	a5
+  fc:	fff00513          	li	a0,-1
+ 100:	f01ff0ef          	jal	ra,0 <_exit>
+ 104:	f9c42783          	lw	a5,-100(s0)
+ 108:	0047a783          	lw	a5,4(a5)
+ 10c:	57c0006f          	j	688 <pcap_filter_with_aux_data+0x60c>
+ 110:	00048793          	mv	a5,s1
+ 114:	5740006f          	j	688 <pcap_filter_with_aux_data+0x60c>
+ 118:	f9c42783          	lw	a5,-100(s0)
+ 11c:	0047a983          	lw	s3,4(a5)
+ 120:	f9042783          	lw	a5,-112(s0)
+ 124:	0137ea63          	bltu	a5,s3,138 <pcap_filter_with_aux_data+0xbc>
+ 128:	f9042783          	lw	a5,-112(s0)
+ 12c:	41378733          	sub	a4,a5,s3
+ 130:	00300793          	li	a5,3
+ 134:	00e7e663          	bltu	a5,a4,140 <pcap_filter_with_aux_data+0xc4>
+ 138:	00000793          	li	a5,0
+ 13c:	54c0006f          	j	688 <pcap_filter_with_aux_data+0x60c>
+ 140:	f9842783          	lw	a5,-104(s0)
+ 144:	013787b3          	add	a5,a5,s3
+ 148:	00078513          	mv	a0,a5
+ 14c:	f09ff0ef          	jal	ra,54 <EXTRACT_BE_U_4>
+ 150:	00050493          	mv	s1,a0
+ 154:	5300006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 158:	f9c42783          	lw	a5,-100(s0)
+ 15c:	0047a983          	lw	s3,4(a5)
+ 160:	f9042783          	lw	a5,-112(s0)
+ 164:	0137ea63          	bltu	a5,s3,178 <pcap_filter_with_aux_data+0xfc>
+ 168:	f9042783          	lw	a5,-112(s0)
+ 16c:	41378733          	sub	a4,a5,s3
+ 170:	00100793          	li	a5,1
+ 174:	00e7e663          	bltu	a5,a4,180 <pcap_filter_with_aux_data+0x104>
+ 178:	00000793          	li	a5,0
+ 17c:	50c0006f          	j	688 <pcap_filter_with_aux_data+0x60c>
+ 180:	f9842783          	lw	a5,-104(s0)
+ 184:	013787b3          	add	a5,a5,s3
+ 188:	00078513          	mv	a0,a5
+ 18c:	ea1ff0ef          	jal	ra,2c <EXTRACT_BE_U_2>
+ 190:	00050793          	mv	a5,a0
+ 194:	00078493          	mv	s1,a5
+ 198:	4ec0006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 19c:	f9442483          	lw	s1,-108(s0)
+ 1a0:	4e40006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 1a4:	f9442903          	lw	s2,-108(s0)
+ 1a8:	4dc0006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 1ac:	f9c42783          	lw	a5,-100(s0)
+ 1b0:	0047a783          	lw	a5,4(a5)
+ 1b4:	00f909b3          	add	s3,s2,a5
+ 1b8:	f9c42783          	lw	a5,-100(s0)
+ 1bc:	0047a783          	lw	a5,4(a5)
+ 1c0:	f9042703          	lw	a4,-112(s0)
+ 1c4:	02f76463          	bltu	a4,a5,1ec <pcap_filter_with_aux_data+0x170>
+ 1c8:	f9c42783          	lw	a5,-100(s0)
+ 1cc:	0047a783          	lw	a5,4(a5)
+ 1d0:	f9042703          	lw	a4,-112(s0)
+ 1d4:	40f707b3          	sub	a5,a4,a5
+ 1d8:	0127ea63          	bltu	a5,s2,1ec <pcap_filter_with_aux_data+0x170>
+ 1dc:	f9042783          	lw	a5,-112(s0)
+ 1e0:	41378733          	sub	a4,a5,s3
+ 1e4:	00300793          	li	a5,3
+ 1e8:	00e7e663          	bltu	a5,a4,1f4 <pcap_filter_with_aux_data+0x178>
+ 1ec:	00000793          	li	a5,0
+ 1f0:	4980006f          	j	688 <pcap_filter_with_aux_data+0x60c>
+ 1f4:	f9842783          	lw	a5,-104(s0)
+ 1f8:	013787b3          	add	a5,a5,s3
+ 1fc:	00078513          	mv	a0,a5
+ 200:	e55ff0ef          	jal	ra,54 <EXTRACT_BE_U_4>
+ 204:	00050493          	mv	s1,a0
+ 208:	47c0006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 20c:	f9c42783          	lw	a5,-100(s0)
+ 210:	0047a783          	lw	a5,4(a5)
+ 214:	00f909b3          	add	s3,s2,a5
+ 218:	f9042783          	lw	a5,-112(s0)
+ 21c:	0327e463          	bltu	a5,s2,244 <pcap_filter_with_aux_data+0x1c8>
+ 220:	f9c42783          	lw	a5,-100(s0)
+ 224:	0047a703          	lw	a4,4(a5)
+ 228:	f9042783          	lw	a5,-112(s0)
+ 22c:	412787b3          	sub	a5,a5,s2
+ 230:	00e7ea63          	bltu	a5,a4,244 <pcap_filter_with_aux_data+0x1c8>
+ 234:	f9042783          	lw	a5,-112(s0)
+ 238:	41378733          	sub	a4,a5,s3
+ 23c:	00100793          	li	a5,1
+ 240:	00e7e663          	bltu	a5,a4,24c <pcap_filter_with_aux_data+0x1d0>
+ 244:	00000793          	li	a5,0
+ 248:	4400006f          	j	688 <pcap_filter_with_aux_data+0x60c>
+ 24c:	f9842783          	lw	a5,-104(s0)
+ 250:	013787b3          	add	a5,a5,s3
+ 254:	00078513          	mv	a0,a5
+ 258:	dd5ff0ef          	jal	ra,2c <EXTRACT_BE_U_2>
+ 25c:	00050793          	mv	a5,a0
+ 260:	00078493          	mv	s1,a5
+ 264:	4200006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 268:	f9c42783          	lw	a5,-100(s0)
+ 26c:	0047a783          	lw	a5,4(a5)
+ 270:	00f909b3          	add	s3,s2,a5
+ 274:	f9c42783          	lw	a5,-100(s0)
+ 278:	0047a783          	lw	a5,4(a5)
+ 27c:	f9042703          	lw	a4,-112(s0)
+ 280:	00e7fc63          	bgeu	a5,a4,298 <pcap_filter_with_aux_data+0x21c>
+ 284:	f9c42783          	lw	a5,-100(s0)
+ 288:	0047a783          	lw	a5,4(a5)
+ 28c:	f9042703          	lw	a4,-112(s0)
+ 290:	40f707b3          	sub	a5,a4,a5
+ 294:	00f96663          	bltu	s2,a5,2a0 <pcap_filter_with_aux_data+0x224>
+ 298:	00000793          	li	a5,0
+ 29c:	3ec0006f          	j	688 <pcap_filter_with_aux_data+0x60c>
+ 2a0:	f9842783          	lw	a5,-104(s0)
+ 2a4:	013787b3          	add	a5,a5,s3
+ 2a8:	0007c783          	lbu	a5,0(a5)
+ 2ac:	00078493          	mv	s1,a5
+ 2b0:	3d40006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 2b4:	f9c42783          	lw	a5,-100(s0)
+ 2b8:	0047a983          	lw	s3,4(a5)
+ 2bc:	f9042783          	lw	a5,-112(s0)
+ 2c0:	00f9e663          	bltu	s3,a5,2cc <pcap_filter_with_aux_data+0x250>
+ 2c4:	00000793          	li	a5,0
+ 2c8:	3c00006f          	j	688 <pcap_filter_with_aux_data+0x60c>
+ 2cc:	f9c42783          	lw	a5,-100(s0)
+ 2d0:	0047a783          	lw	a5,4(a5)
+ 2d4:	f9842703          	lw	a4,-104(s0)
+ 2d8:	00f707b3          	add	a5,a4,a5
+ 2dc:	0007c783          	lbu	a5,0(a5)
+ 2e0:	00279793          	slli	a5,a5,0x2
+ 2e4:	03c7f913          	andi	s2,a5,60
+ 2e8:	39c0006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 2ec:	f9c42783          	lw	a5,-100(s0)
+ 2f0:	0047a483          	lw	s1,4(a5)
+ 2f4:	3900006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 2f8:	f9c42783          	lw	a5,-100(s0)
+ 2fc:	0047a903          	lw	s2,4(a5)
+ 300:	3840006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 304:	f9c42783          	lw	a5,-100(s0)
+ 308:	0047a783          	lw	a5,4(a5)
+ 30c:	00279793          	slli	a5,a5,0x2
+ 310:	fe078793          	addi	a5,a5,-32
+ 314:	008787b3          	add	a5,a5,s0
+ 318:	fc07a483          	lw	s1,-64(a5)
+ 31c:	3680006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 320:	f9c42783          	lw	a5,-100(s0)
+ 324:	0047a783          	lw	a5,4(a5)
+ 328:	00279793          	slli	a5,a5,0x2
+ 32c:	fe078793          	addi	a5,a5,-32
+ 330:	008787b3          	add	a5,a5,s0
+ 334:	fc07a903          	lw	s2,-64(a5)
+ 338:	34c0006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 33c:	f9c42783          	lw	a5,-100(s0)
+ 340:	0047a783          	lw	a5,4(a5)
+ 344:	00279793          	slli	a5,a5,0x2
+ 348:	fe078793          	addi	a5,a5,-32
+ 34c:	008787b3          	add	a5,a5,s0
+ 350:	fc97a023          	sw	s1,-64(a5)
+ 354:	3300006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 358:	f9c42783          	lw	a5,-100(s0)
+ 35c:	0047a783          	lw	a5,4(a5)
+ 360:	00279793          	slli	a5,a5,0x2
+ 364:	fe078793          	addi	a5,a5,-32
+ 368:	008787b3          	add	a5,a5,s0
+ 36c:	fd27a023          	sw	s2,-64(a5)
+ 370:	3140006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 374:	f9c42783          	lw	a5,-100(s0)
+ 378:	0047a783          	lw	a5,4(a5)
+ 37c:	00379793          	slli	a5,a5,0x3
+ 380:	f9c42703          	lw	a4,-100(s0)
+ 384:	00f707b3          	add	a5,a4,a5
+ 388:	f8f42e23          	sw	a5,-100(s0)
+ 38c:	2f80006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 390:	f9c42783          	lw	a5,-100(s0)
+ 394:	0047a783          	lw	a5,4(a5)
+ 398:	0097fa63          	bgeu	a5,s1,3ac <pcap_filter_with_aux_data+0x330>
+ 39c:	f9c42783          	lw	a5,-100(s0)
+ 3a0:	0027c783          	lbu	a5,2(a5)
+ 3a4:	00379793          	slli	a5,a5,0x3
+ 3a8:	0100006f          	j	3b8 <pcap_filter_with_aux_data+0x33c>
+ 3ac:	f9c42783          	lw	a5,-100(s0)
+ 3b0:	0037c783          	lbu	a5,3(a5)
+ 3b4:	00379793          	slli	a5,a5,0x3
+ 3b8:	f9c42703          	lw	a4,-100(s0)
+ 3bc:	00f707b3          	add	a5,a4,a5
+ 3c0:	f8f42e23          	sw	a5,-100(s0)
+ 3c4:	2c00006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 3c8:	f9c42783          	lw	a5,-100(s0)
+ 3cc:	0047a783          	lw	a5,4(a5)
+ 3d0:	00f4ea63          	bltu	s1,a5,3e4 <pcap_filter_with_aux_data+0x368>
+ 3d4:	f9c42783          	lw	a5,-100(s0)
+ 3d8:	0027c783          	lbu	a5,2(a5)
+ 3dc:	00379793          	slli	a5,a5,0x3
+ 3e0:	0100006f          	j	3f0 <pcap_filter_with_aux_data+0x374>
+ 3e4:	f9c42783          	lw	a5,-100(s0)
+ 3e8:	0037c783          	lbu	a5,3(a5)
+ 3ec:	00379793          	slli	a5,a5,0x3
+ 3f0:	f9c42703          	lw	a4,-100(s0)
+ 3f4:	00f707b3          	add	a5,a4,a5
+ 3f8:	f8f42e23          	sw	a5,-100(s0)
+ 3fc:	2880006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 400:	f9c42783          	lw	a5,-100(s0)
+ 404:	0047a783          	lw	a5,4(a5)
+ 408:	00f49a63          	bne	s1,a5,41c <pcap_filter_with_aux_data+0x3a0>
+ 40c:	f9c42783          	lw	a5,-100(s0)
+ 410:	0027c783          	lbu	a5,2(a5)
+ 414:	00379793          	slli	a5,a5,0x3
+ 418:	0100006f          	j	428 <pcap_filter_with_aux_data+0x3ac>
+ 41c:	f9c42783          	lw	a5,-100(s0)
+ 420:	0037c783          	lbu	a5,3(a5)
+ 424:	00379793          	slli	a5,a5,0x3
+ 428:	f9c42703          	lw	a4,-100(s0)
+ 42c:	00f707b3          	add	a5,a4,a5
+ 430:	f8f42e23          	sw	a5,-100(s0)
+ 434:	2500006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 438:	f9c42783          	lw	a5,-100(s0)
+ 43c:	0047a783          	lw	a5,4(a5)
+ 440:	00f4f7b3          	and	a5,s1,a5
+ 444:	00078a63          	beqz	a5,458 <pcap_filter_with_aux_data+0x3dc>
+ 448:	f9c42783          	lw	a5,-100(s0)
+ 44c:	0027c783          	lbu	a5,2(a5)
+ 450:	00379793          	slli	a5,a5,0x3
+ 454:	0100006f          	j	464 <pcap_filter_with_aux_data+0x3e8>
+ 458:	f9c42783          	lw	a5,-100(s0)
+ 45c:	0037c783          	lbu	a5,3(a5)
+ 460:	00379793          	slli	a5,a5,0x3
+ 464:	f9c42703          	lw	a4,-100(s0)
+ 468:	00f707b3          	add	a5,a4,a5
+ 46c:	f8f42e23          	sw	a5,-100(s0)
+ 470:	2140006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 474:	00997a63          	bgeu	s2,s1,488 <pcap_filter_with_aux_data+0x40c>
+ 478:	f9c42783          	lw	a5,-100(s0)
+ 47c:	0027c783          	lbu	a5,2(a5)
+ 480:	00379793          	slli	a5,a5,0x3
+ 484:	0100006f          	j	494 <pcap_filter_with_aux_data+0x418>
+ 488:	f9c42783          	lw	a5,-100(s0)
+ 48c:	0037c783          	lbu	a5,3(a5)
+ 490:	00379793          	slli	a5,a5,0x3
+ 494:	f9c42703          	lw	a4,-100(s0)
+ 498:	00f707b3          	add	a5,a4,a5
+ 49c:	f8f42e23          	sw	a5,-100(s0)
+ 4a0:	1e40006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 4a4:	0124ea63          	bltu	s1,s2,4b8 <pcap_filter_with_aux_data+0x43c>
+ 4a8:	f9c42783          	lw	a5,-100(s0)
+ 4ac:	0027c783          	lbu	a5,2(a5)
+ 4b0:	00379793          	slli	a5,a5,0x3
+ 4b4:	0100006f          	j	4c4 <pcap_filter_with_aux_data+0x448>
+ 4b8:	f9c42783          	lw	a5,-100(s0)
+ 4bc:	0037c783          	lbu	a5,3(a5)
+ 4c0:	00379793          	slli	a5,a5,0x3
+ 4c4:	f9c42703          	lw	a4,-100(s0)
+ 4c8:	00f707b3          	add	a5,a4,a5
+ 4cc:	f8f42e23          	sw	a5,-100(s0)
+ 4d0:	1b40006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 4d4:	01249a63          	bne	s1,s2,4e8 <pcap_filter_with_aux_data+0x46c>
+ 4d8:	f9c42783          	lw	a5,-100(s0)
+ 4dc:	0027c783          	lbu	a5,2(a5)
+ 4e0:	00379793          	slli	a5,a5,0x3
+ 4e4:	0100006f          	j	4f4 <pcap_filter_with_aux_data+0x478>
+ 4e8:	f9c42783          	lw	a5,-100(s0)
+ 4ec:	0037c783          	lbu	a5,3(a5)
+ 4f0:	00379793          	slli	a5,a5,0x3
+ 4f4:	f9c42703          	lw	a4,-100(s0)
+ 4f8:	00f707b3          	add	a5,a4,a5
+ 4fc:	f8f42e23          	sw	a5,-100(s0)
+ 500:	1840006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 504:	0124f7b3          	and	a5,s1,s2
+ 508:	00078a63          	beqz	a5,51c <pcap_filter_with_aux_data+0x4a0>
+ 50c:	f9c42783          	lw	a5,-100(s0)
+ 510:	0027c783          	lbu	a5,2(a5)
+ 514:	00379793          	slli	a5,a5,0x3
+ 518:	0100006f          	j	528 <pcap_filter_with_aux_data+0x4ac>
+ 51c:	f9c42783          	lw	a5,-100(s0)
+ 520:	0037c783          	lbu	a5,3(a5)
+ 524:	00379793          	slli	a5,a5,0x3
+ 528:	f9c42703          	lw	a4,-100(s0)
+ 52c:	00f707b3          	add	a5,a4,a5
+ 530:	f8f42e23          	sw	a5,-100(s0)
+ 534:	1500006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 538:	012484b3          	add	s1,s1,s2
+ 53c:	1480006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 540:	412484b3          	sub	s1,s1,s2
+ 544:	1400006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 548:	032484b3          	mul	s1,s1,s2
+ 54c:	1380006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 550:	00091663          	bnez	s2,55c <pcap_filter_with_aux_data+0x4e0>
+ 554:	00000793          	li	a5,0
+ 558:	1300006f          	j	688 <pcap_filter_with_aux_data+0x60c>
+ 55c:	0324d4b3          	divu	s1,s1,s2
+ 560:	1240006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 564:	00091663          	bnez	s2,570 <pcap_filter_with_aux_data+0x4f4>
+ 568:	00000793          	li	a5,0
+ 56c:	11c0006f          	j	688 <pcap_filter_with_aux_data+0x60c>
+ 570:	0324f7b3          	remu	a5,s1,s2
+ 574:	00078493          	mv	s1,a5
+ 578:	10c0006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 57c:	0124f4b3          	and	s1,s1,s2
+ 580:	1040006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 584:	0124e4b3          	or	s1,s1,s2
+ 588:	0fc0006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 58c:	0124c4b3          	xor	s1,s1,s2
+ 590:	0f40006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 594:	01f00793          	li	a5,31
+ 598:	0127e663          	bltu	a5,s2,5a4 <pcap_filter_with_aux_data+0x528>
+ 59c:	012494b3          	sll	s1,s1,s2
+ 5a0:	0e40006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 5a4:	00000493          	li	s1,0
+ 5a8:	0dc0006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 5ac:	01f00793          	li	a5,31
+ 5b0:	0127e663          	bltu	a5,s2,5bc <pcap_filter_with_aux_data+0x540>
+ 5b4:	0124d4b3          	srl	s1,s1,s2
+ 5b8:	0cc0006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 5bc:	00000493          	li	s1,0
+ 5c0:	0c40006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 5c4:	f9c42783          	lw	a5,-100(s0)
+ 5c8:	0047a783          	lw	a5,4(a5)
+ 5cc:	00f484b3          	add	s1,s1,a5
+ 5d0:	0b40006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 5d4:	f9c42783          	lw	a5,-100(s0)
+ 5d8:	0047a783          	lw	a5,4(a5)
+ 5dc:	40f484b3          	sub	s1,s1,a5
+ 5e0:	0a40006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 5e4:	f9c42783          	lw	a5,-100(s0)
+ 5e8:	0047a783          	lw	a5,4(a5)
+ 5ec:	02f484b3          	mul	s1,s1,a5
+ 5f0:	0940006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 5f4:	f9c42783          	lw	a5,-100(s0)
+ 5f8:	0047a783          	lw	a5,4(a5)
+ 5fc:	02f4d4b3          	divu	s1,s1,a5
+ 600:	0840006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 604:	f9c42783          	lw	a5,-100(s0)
+ 608:	0047a783          	lw	a5,4(a5)
+ 60c:	02f4f7b3          	remu	a5,s1,a5
+ 610:	00078493          	mv	s1,a5
+ 614:	0700006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 618:	f9c42783          	lw	a5,-100(s0)
+ 61c:	0047a783          	lw	a5,4(a5)
+ 620:	00f4f4b3          	and	s1,s1,a5
+ 624:	0600006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 628:	f9c42783          	lw	a5,-100(s0)
+ 62c:	0047a783          	lw	a5,4(a5)
+ 630:	00f4e4b3          	or	s1,s1,a5
+ 634:	0500006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 638:	f9c42783          	lw	a5,-100(s0)
+ 63c:	0047a783          	lw	a5,4(a5)
+ 640:	00f4c4b3          	xor	s1,s1,a5
+ 644:	0400006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 648:	f9c42783          	lw	a5,-100(s0)
+ 64c:	0047a783          	lw	a5,4(a5)
+ 650:	00f494b3          	sll	s1,s1,a5
+ 654:	0300006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 658:	f9c42783          	lw	a5,-100(s0)
+ 65c:	0047a783          	lw	a5,4(a5)
+ 660:	00f4d4b3          	srl	s1,s1,a5
+ 664:	0200006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 668:	409004b3          	neg	s1,s1
+ 66c:	0180006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 670:	00048913          	mv	s2,s1
+ 674:	0100006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 678:	00090493          	mv	s1,s2
+ 67c:	0080006f          	j	684 <pcap_filter_with_aux_data+0x608>
+ 680:	00000013          	nop
+ 684:	a49ff06f          	j	cc <pcap_filter_with_aux_data+0x50>
+ 688:	00078513          	mv	a0,a5
+ 68c:	06c12083          	lw	ra,108(sp)
+ 690:	06812403          	lw	s0,104(sp)
+ 694:	06412483          	lw	s1,100(sp)
+ 698:	06012903          	lw	s2,96(sp)
+ 69c:	05c12983          	lw	s3,92(sp)
+ 6a0:	07010113          	addi	sp,sp,112
+ 6a4:	00008067          	ret
+
+000006a8 <pcap_filter>:
+ 6a8:	fe010113          	addi	sp,sp,-32
+ 6ac:	00112e23          	sw	ra,28(sp)
+ 6b0:	00812c23          	sw	s0,24(sp)
+ 6b4:	02010413          	addi	s0,sp,32
+ 6b8:	fea42623          	sw	a0,-20(s0)
+ 6bc:	feb42423          	sw	a1,-24(s0)
+ 6c0:	fec42223          	sw	a2,-28(s0)
+ 6c4:	fed42023          	sw	a3,-32(s0)
+ 6c8:	fe042683          	lw	a3,-32(s0)
+ 6cc:	fe442603          	lw	a2,-28(s0)
+ 6d0:	fe842583          	lw	a1,-24(s0)
+ 6d4:	fec42503          	lw	a0,-20(s0)
+ 6d8:	9a5ff0ef          	jal	ra,7c <pcap_filter_with_aux_data>
+ 6dc:	00050793          	mv	a5,a0
+ 6e0:	00078513          	mv	a0,a5
+ 6e4:	01c12083          	lw	ra,28(sp)
+ 6e8:	01812403          	lw	s0,24(sp)
+ 6ec:	02010113          	addi	sp,sp,32
+ 6f0:	00008067          	ret
+
+000006f4 <_start>:
+ 6f4:	fe010113          	addi	sp,sp,-32
+ 6f8:	00112e23          	sw	ra,28(sp)
+ 6fc:	00812c23          	sw	s0,24(sp)
+ 700:	02010413          	addi	s0,sp,32
+ 704:	000017b7          	lui	a5,0x1
+ 708:	a1478793          	addi	a5,a5,-1516 # a14 <bpfidata>
+ 70c:	fef42623          	sw	a5,-20(s0)
+ 710:	00a00693          	li	a3,10
+ 714:	00a00613          	li	a2,10
+ 718:	000017b7          	lui	a5,0x1
+ 71c:	cb478593          	addi	a1,a5,-844 # cb4 <pkt>
+ 720:	fec42503          	lw	a0,-20(s0)
+ 724:	f85ff0ef          	jal	ra,6a8 <pcap_filter>
+ 728:	00050793          	mv	a5,a0
+ 72c:	fef42423          	sw	a5,-24(s0)
+ 730:	fe842503          	lw	a0,-24(s0)
+ 734:	8cdff0ef          	jal	ra,0 <_exit>
+ 738:	00000013          	nop
+ 73c:	01c12083          	lw	ra,28(sp)
+ 740:	01812403          	lw	s0,24(sp)
+ 744:	02010113          	addi	sp,sp,32
+ 748:	00008067          	ret
+ 74c:	02ec                	.2byte	0x2ec
+ 74e:	0000                	.2byte	0x0
+ 750:	02f8                	.2byte	0x2f8
+ 752:	0000                	.2byte	0x0
+ 754:	033c                	.2byte	0x33c
+ 756:	0000                	.2byte	0x0
+ 758:	0358                	.2byte	0x358
+ 75a:	0000                	.2byte	0x0
+ 75c:	05c4                	.2byte	0x5c4
+ 75e:	0000                	.2byte	0x0
+ 760:	0374                	.2byte	0x374
+ 762:	0000                	.2byte	0x0
+ 764:	0104                	.2byte	0x104
+ 766:	0000                	.2byte	0x0
+ 768:	0670                	.2byte	0x670
+ 76a:	0000                	.2byte	0x0
+ 76c:	00fc                	.2byte	0xfc
+ 76e:	0000                	.2byte	0x0
+ 770:	00fc                	.2byte	0xfc
+ 772:	0000                	.2byte	0x0
+ 774:	00fc                	.2byte	0xfc
+ 776:	0000                	.2byte	0x0
+ 778:	00fc                	.2byte	0xfc
+ 77a:	0000                	.2byte	0x0
+ 77c:	0538                	.2byte	0x538
+ 77e:	0000                	.2byte	0x0
+ 780:	00fc                	.2byte	0xfc
+ 782:	0000                	.2byte	0x0
+ 784:	00fc                	.2byte	0xfc
+ 786:	0000                	.2byte	0x0
+ 788:	00fc                	.2byte	0xfc
+ 78a:	0000                	.2byte	0x0
+ 78c:	00fc                	.2byte	0xfc
+ 78e:	0000                	.2byte	0x0
+ 790:	00fc                	.2byte	0xfc
+ 792:	0000                	.2byte	0x0
+ 794:	00fc                	.2byte	0xfc
+ 796:	0000                	.2byte	0x0
+ 798:	00fc                	.2byte	0xfc
+ 79a:	0000                	.2byte	0x0
+ 79c:	05d4                	.2byte	0x5d4
+ 79e:	0000                	.2byte	0x0
+ 7a0:	0400                	.2byte	0x400
+ 7a2:	0000                	.2byte	0x0
+ 7a4:	0110                	.2byte	0x110
+ 7a6:	0000                	.2byte	0x0
+ 7a8:	00fc                	.2byte	0xfc
+ 7aa:	0000                	.2byte	0x0
+ 7ac:	00fc                	.2byte	0xfc
+ 7ae:	0000                	.2byte	0x0
+ 7b0:	00fc                	.2byte	0xfc
+ 7b2:	0000                	.2byte	0x0
+ 7b4:	00fc                	.2byte	0xfc
+ 7b6:	0000                	.2byte	0x0
+ 7b8:	00fc                	.2byte	0xfc
+ 7ba:	0000                	.2byte	0x0
+ 7bc:	0540                	.2byte	0x540
+ 7be:	0000                	.2byte	0x0
+ 7c0:	04d4                	.2byte	0x4d4
+ 7c2:	0000                	.2byte	0x0
+ 7c4:	00fc                	.2byte	0xfc
+ 7c6:	0000                	.2byte	0x0
+ 7c8:	00fc                	.2byte	0xfc
+ 7ca:	0000                	.2byte	0x0
+ 7cc:	0118                	.2byte	0x118
+ 7ce:	0000                	.2byte	0x0
+ 7d0:	00fc                	.2byte	0xfc
+ 7d2:	0000                	.2byte	0x0
+ 7d4:	00fc                	.2byte	0xfc
+ 7d6:	0000                	.2byte	0x0
+ 7d8:	00fc                	.2byte	0xfc
+ 7da:	0000                	.2byte	0x0
+ 7dc:	05e4                	.2byte	0x5e4
+ 7de:	0000                	.2byte	0x0
+ 7e0:	0390                	.2byte	0x390
+ 7e2:	0000                	.2byte	0x0
+ 7e4:	00fc                	.2byte	0xfc
+ 7e6:	0000                	.2byte	0x0
+ 7e8:	00fc                	.2byte	0xfc
+ 7ea:	0000                	.2byte	0x0
+ 7ec:	0158                	.2byte	0x158
+ 7ee:	0000                	.2byte	0x0
+ 7f0:	00fc                	.2byte	0xfc
+ 7f2:	0000                	.2byte	0x0
+ 7f4:	00fc                	.2byte	0xfc
+ 7f6:	0000                	.2byte	0x0
+ 7f8:	00fc                	.2byte	0xfc
+ 7fa:	0000                	.2byte	0x0
+ 7fc:	0548                	.2byte	0x548
+ 7fe:	0000                	.2byte	0x0
+ 800:	0474                	.2byte	0x474
+ 802:	0000                	.2byte	0x0
+ 804:	00fc                	.2byte	0xfc
+ 806:	0000                	.2byte	0x0
+ 808:	00fc                	.2byte	0xfc
+ 80a:	0000                	.2byte	0x0
+ 80c:	0680                	.2byte	0x680
+ 80e:	0000                	.2byte	0x0
+ 810:	00fc                	.2byte	0xfc
+ 812:	0000                	.2byte	0x0
+ 814:	00fc                	.2byte	0xfc
+ 816:	0000                	.2byte	0x0
+ 818:	00fc                	.2byte	0xfc
+ 81a:	0000                	.2byte	0x0
+ 81c:	05f4                	.2byte	0x5f4
+ 81e:	0000                	.2byte	0x0
+ 820:	03c8                	.2byte	0x3c8
+ 822:	0000                	.2byte	0x0
+ 824:	00fc                	.2byte	0xfc
+ 826:	0000                	.2byte	0x0
+ 828:	00fc                	.2byte	0xfc
+ 82a:	0000                	.2byte	0x0
+ 82c:	00fc                	.2byte	0xfc
+ 82e:	0000                	.2byte	0x0
+ 830:	00fc                	.2byte	0xfc
+ 832:	0000                	.2byte	0x0
+ 834:	00fc                	.2byte	0xfc
+ 836:	0000                	.2byte	0x0
+ 838:	00fc                	.2byte	0xfc
+ 83a:	0000                	.2byte	0x0
+ 83c:	0550                	.2byte	0x550
+ 83e:	0000                	.2byte	0x0
+ 840:	04a4                	.2byte	0x4a4
+ 842:	0000                	.2byte	0x0
+ 844:	00fc                	.2byte	0xfc
+ 846:	0000                	.2byte	0x0
+ 848:	00fc                	.2byte	0xfc
+ 84a:	0000                	.2byte	0x0
+ 84c:	01ac                	.2byte	0x1ac
+ 84e:	0000                	.2byte	0x0
+ 850:	00fc                	.2byte	0xfc
+ 852:	0000                	.2byte	0x0
+ 854:	00fc                	.2byte	0xfc
+ 856:	0000                	.2byte	0x0
+ 858:	00fc                	.2byte	0xfc
+ 85a:	0000                	.2byte	0x0
+ 85c:	0628                	.2byte	0x628
+ 85e:	0000                	.2byte	0x0
+ 860:	0438                	.2byte	0x438
+ 862:	0000                	.2byte	0x0
+ 864:	00fc                	.2byte	0xfc
+ 866:	0000                	.2byte	0x0
+ 868:	00fc                	.2byte	0xfc
+ 86a:	0000                	.2byte	0x0
+ 86c:	020c                	.2byte	0x20c
+ 86e:	0000                	.2byte	0x0
+ 870:	00fc                	.2byte	0xfc
+ 872:	0000                	.2byte	0x0
+ 874:	00fc                	.2byte	0xfc
+ 876:	0000                	.2byte	0x0
+ 878:	00fc                	.2byte	0xfc
+ 87a:	0000                	.2byte	0x0
+ 87c:	0584                	.2byte	0x584
+ 87e:	0000                	.2byte	0x0
+ 880:	0504                	.2byte	0x504
+ 882:	0000                	.2byte	0x0
+ 884:	00fc                	.2byte	0xfc
+ 886:	0000                	.2byte	0x0
+ 888:	00fc                	.2byte	0xfc
+ 88a:	0000                	.2byte	0x0
+ 88c:	0268                	.2byte	0x268
+ 88e:	0000                	.2byte	0x0
+ 890:	00fc                	.2byte	0xfc
+ 892:	0000                	.2byte	0x0
+ 894:	00fc                	.2byte	0xfc
+ 896:	0000                	.2byte	0x0
+ 898:	00fc                	.2byte	0xfc
+ 89a:	0000                	.2byte	0x0
+ 89c:	0618                	.2byte	0x618
+ 89e:	0000                	.2byte	0x0
+ 8a0:	00fc                	.2byte	0xfc
+ 8a2:	0000                	.2byte	0x0
+ 8a4:	00fc                	.2byte	0xfc
+ 8a6:	0000                	.2byte	0x0
+ 8a8:	00fc                	.2byte	0xfc
+ 8aa:	0000                	.2byte	0x0
+ 8ac:	00fc                	.2byte	0xfc
+ 8ae:	0000                	.2byte	0x0
+ 8b0:	00fc                	.2byte	0xfc
+ 8b2:	0000                	.2byte	0x0
+ 8b4:	00fc                	.2byte	0xfc
+ 8b6:	0000                	.2byte	0x0
+ 8b8:	00fc                	.2byte	0xfc
+ 8ba:	0000                	.2byte	0x0
+ 8bc:	057c                	.2byte	0x57c
+ 8be:	0000                	.2byte	0x0
+ 8c0:	00fc                	.2byte	0xfc
+ 8c2:	0000                	.2byte	0x0
+ 8c4:	00fc                	.2byte	0xfc
+ 8c6:	0000                	.2byte	0x0
+ 8c8:	00fc                	.2byte	0xfc
+ 8ca:	0000                	.2byte	0x0
+ 8cc:	0304                	.2byte	0x304
+ 8ce:	0000                	.2byte	0x0
+ 8d0:	0320                	.2byte	0x320
+ 8d2:	0000                	.2byte	0x0
+ 8d4:	00fc                	.2byte	0xfc
+ 8d6:	0000                	.2byte	0x0
+ 8d8:	00fc                	.2byte	0xfc
+ 8da:	0000                	.2byte	0x0
+ 8dc:	0648                	.2byte	0x648
+ 8de:	0000                	.2byte	0x0
+ 8e0:	00fc                	.2byte	0xfc
+ 8e2:	0000                	.2byte	0x0
+ 8e4:	00fc                	.2byte	0xfc
+ 8e6:	0000                	.2byte	0x0
+ 8e8:	00fc                	.2byte	0xfc
+ 8ea:	0000                	.2byte	0x0
+ 8ec:	00fc                	.2byte	0xfc
+ 8ee:	0000                	.2byte	0x0
+ 8f0:	00fc                	.2byte	0xfc
+ 8f2:	0000                	.2byte	0x0
+ 8f4:	00fc                	.2byte	0xfc
+ 8f6:	0000                	.2byte	0x0
+ 8f8:	00fc                	.2byte	0xfc
+ 8fa:	0000                	.2byte	0x0
+ 8fc:	0594                	.2byte	0x594
+ 8fe:	0000                	.2byte	0x0
+ 900:	00fc                	.2byte	0xfc
+ 902:	0000                	.2byte	0x0
+ 904:	00fc                	.2byte	0xfc
+ 906:	0000                	.2byte	0x0
+ 908:	00fc                	.2byte	0xfc
+ 90a:	0000                	.2byte	0x0
+ 90c:	00fc                	.2byte	0xfc
+ 90e:	0000                	.2byte	0x0
+ 910:	00fc                	.2byte	0xfc
+ 912:	0000                	.2byte	0x0
+ 914:	00fc                	.2byte	0xfc
+ 916:	0000                	.2byte	0x0
+ 918:	00fc                	.2byte	0xfc
+ 91a:	0000                	.2byte	0x0
+ 91c:	0658                	.2byte	0x658
+ 91e:	0000                	.2byte	0x0
+ 920:	00fc                	.2byte	0xfc
+ 922:	0000                	.2byte	0x0
+ 924:	00fc                	.2byte	0xfc
+ 926:	0000                	.2byte	0x0
+ 928:	00fc                	.2byte	0xfc
+ 92a:	0000                	.2byte	0x0
+ 92c:	00fc                	.2byte	0xfc
+ 92e:	0000                	.2byte	0x0
+ 930:	00fc                	.2byte	0xfc
+ 932:	0000                	.2byte	0x0
+ 934:	00fc                	.2byte	0xfc
+ 936:	0000                	.2byte	0x0
+ 938:	00fc                	.2byte	0xfc
+ 93a:	0000                	.2byte	0x0
+ 93c:	05ac                	.2byte	0x5ac
+ 93e:	0000                	.2byte	0x0
+ 940:	00fc                	.2byte	0xfc
+ 942:	0000                	.2byte	0x0
+ 944:	00fc                	.2byte	0xfc
+ 946:	0000                	.2byte	0x0
+ 948:	00fc                	.2byte	0xfc
+ 94a:	0000                	.2byte	0x0
+ 94c:	019c                	.2byte	0x19c
+ 94e:	0000                	.2byte	0x0
+ 950:	01a4                	.2byte	0x1a4
+ 952:	0000                	.2byte	0x0
+ 954:	00fc                	.2byte	0xfc
+ 956:	0000                	.2byte	0x0
+ 958:	00fc                	.2byte	0xfc
+ 95a:	0000                	.2byte	0x0
+ 95c:	0668                	.2byte	0x668
+ 95e:	0000                	.2byte	0x0
+ 960:	00fc                	.2byte	0xfc
+ 962:	0000                	.2byte	0x0
+ 964:	00fc                	.2byte	0xfc
+ 966:	0000                	.2byte	0x0
+ 968:	0678                	.2byte	0x678
+ 96a:	0000                	.2byte	0x0
+ 96c:	00fc                	.2byte	0xfc
+ 96e:	0000                	.2byte	0x0
+ 970:	00fc                	.2byte	0xfc
+ 972:	0000                	.2byte	0x0
+ 974:	00fc                	.2byte	0xfc
+ 976:	0000                	.2byte	0x0
+ 978:	00fc                	.2byte	0xfc
+ 97a:	0000                	.2byte	0x0
+ 97c:	00fc                	.2byte	0xfc
+ 97e:	0000                	.2byte	0x0
+ 980:	00fc                	.2byte	0xfc
+ 982:	0000                	.2byte	0x0
+ 984:	00fc                	.2byte	0xfc
+ 986:	0000                	.2byte	0x0
+ 988:	00fc                	.2byte	0xfc
+ 98a:	0000                	.2byte	0x0
+ 98c:	00fc                	.2byte	0xfc
+ 98e:	0000                	.2byte	0x0
+ 990:	00fc                	.2byte	0xfc
+ 992:	0000                	.2byte	0x0
+ 994:	00fc                	.2byte	0xfc
+ 996:	0000                	.2byte	0x0
+ 998:	00fc                	.2byte	0xfc
+ 99a:	0000                	.2byte	0x0
+ 99c:	0604                	.2byte	0x604
+ 99e:	0000                	.2byte	0x0
+ 9a0:	00fc                	.2byte	0xfc
+ 9a2:	0000                	.2byte	0x0
+ 9a4:	00fc                	.2byte	0xfc
+ 9a6:	0000                	.2byte	0x0
+ 9a8:	00fc                	.2byte	0xfc
+ 9aa:	0000                	.2byte	0x0
+ 9ac:	00fc                	.2byte	0xfc
+ 9ae:	0000                	.2byte	0x0
+ 9b0:	00fc                	.2byte	0xfc
+ 9b2:	0000                	.2byte	0x0
+ 9b4:	00fc                	.2byte	0xfc
+ 9b6:	0000                	.2byte	0x0
+ 9b8:	00fc                	.2byte	0xfc
+ 9ba:	0000                	.2byte	0x0
+ 9bc:	0564                	.2byte	0x564
+ 9be:	0000                	.2byte	0x0
+ 9c0:	00fc                	.2byte	0xfc
+ 9c2:	0000                	.2byte	0x0
+ 9c4:	00fc                	.2byte	0xfc
+ 9c6:	0000                	.2byte	0x0
+ 9c8:	00fc                	.2byte	0xfc
+ 9ca:	0000                	.2byte	0x0
+ 9cc:	00fc                	.2byte	0xfc
+ 9ce:	0000                	.2byte	0x0
+ 9d0:	00fc                	.2byte	0xfc
+ 9d2:	0000                	.2byte	0x0
+ 9d4:	00fc                	.2byte	0xfc
+ 9d6:	0000                	.2byte	0x0
+ 9d8:	00fc                	.2byte	0xfc
+ 9da:	0000                	.2byte	0x0
+ 9dc:	0638                	.2byte	0x638
+ 9de:	0000                	.2byte	0x0
+ 9e0:	00fc                	.2byte	0xfc
+ 9e2:	0000                	.2byte	0x0
+ 9e4:	00fc                	.2byte	0xfc
+ 9e6:	0000                	.2byte	0x0
+ 9e8:	00fc                	.2byte	0xfc
+ 9ea:	0000                	.2byte	0x0
+ 9ec:	00fc                	.2byte	0xfc
+ 9ee:	0000                	.2byte	0x0
+ 9f0:	00fc                	.2byte	0xfc
+ 9f2:	0000                	.2byte	0x0
+ 9f4:	00fc                	.2byte	0xfc
+ 9f6:	0000                	.2byte	0x0
+ 9f8:	00fc                	.2byte	0xfc
+ 9fa:	0000                	.2byte	0x0
+ 9fc:	058c                	.2byte	0x58c
+ 9fe:	0000                	.2byte	0x0
+ a00:	00fc                	.2byte	0xfc
+ a02:	0000                	.2byte	0x0
+ a04:	00fc                	.2byte	0xfc
+ a06:	0000                	.2byte	0x0
+ a08:	00fc                	.2byte	0xfc
+ a0a:	0000                	.2byte	0x0
+ a0c:	00fc                	.2byte	0xfc
+ a0e:	0000                	.2byte	0x0
+ a10:	02b4                	.2byte	0x2b4
+	...
+
+00000a14 <bpfidata>:
+ a14:	0028 0000 000e 0000 0015 0200 0800 0000     (...............
+ a24:	0020 0000 0020 0000 0015 004e 0304 0102      ... .....N.....
+ a34:	0028 0000 000e 0000 0015 0200 0806 0000     (...............
+ a44:	0020 0000 0028 0000 0015 004a 0304 0102      ...(.....J.....
+ a54:	0028 0000 000e 0000 0015 0200 8035 0000     (...........5...
+ a64:	0020 0000 0028 0000 0015 0046 0304 0102      ...(.....F.....
+ a74:	0028 0000 000e 0000 0015 0600 86dd 0000     (...............
+ a84:	0030 0000 0016 0000 0015 0042 0006 0000     0.........B.....
+ a94:	0030 0000 0016 0000 0015 0200 002c 0000     0...........,...
+ aa4:	0030 0000 0038 0000 0015 003e 0006 0000     0...8.....>.....
+ ab4:	0028 0000 000e 0000 0015 0200 0800 0000     (...............
+ ac4:	0030 0000 0019 0000 0015 003a 0006 0000     0.........:.....
+ ad4:	0028 0000 000e 0000 0015 0600 86dd 0000     (...............
+ ae4:	0030 0000 0016 0000 0015 0036 0011 0000     0.........6.....
+ af4:	0030 0000 0016 0000 0015 0200 002c 0000     0...........,...
+ b04:	0030 0000 0038 0000 0015 0032 0011 0000     0...8.....2.....
+ b14:	0028 0000 000e 0000 0015 0200 0800 0000     (...............
+ b24:	0030 0000 0019 0000 0015 002e 0011 0000     0...............
+ b34:	0028 0000 000e 0000 0015 002c 0800 0000     (.........,.....
+ b44:	0028 0000 000e 0000 0015 002a 86dd 0000     (.........*.....
+ b54:	0028 0000 000e 0000 0015 0028 0806 0000     (.........(.....
+ b64:	0028 0000 000e 0000 0015 0026 8035 0000     (.........&.5...
+ b74:	0028 0000 000e 0000 0015 0024 809b 0000     (.........$.....
+ b84:	0028 0000 000e 0000 0015 0400 0004 0000     (...............
+ b94:	0020 0000 0014 0000 0015 0200 809b 0007      ...............
+ ba4:	0020 0000 0010 0000 0015 001e 0308 aaaa      ...............
+ bb4:	0028 0000 000e 0000 0015 001c 80f3 0000     (...............
+ bc4:	0028 0000 000e 0000 0015 0400 0004 0000     (...............
+ bd4:	0020 0000 0014 0000 0015 0200 80f3 0000      ...............
+ be4:	0020 0000 0010 0000 0015 0016 0300 aaaa      ...............
+ bf4:	0028 0000 000e 0000 0015 0014 6003 0000     (............`..
+ c04:	0028 0000 000e 0000 0015 0200 0004 0000     (...............
+ c14:	0028 0000 0010 0000 0015 0010 fefe 0000     (...............
+ c24:	0028 0000 000e 0000 0015 0200 0004 0000     (...............
+ c34:	0030 0000 0010 0000 0015 000c 0042 0000     0...........B...
+ c44:	0028 0000 000e 0000 0015 000a 8137 0000     (...........7...
+ c54:	0028 0000 000e 0000 0015 0008 0001 0000     (...............
+ c64:	0028 0000 000e 0000 0015 0700 0004 0000     (...............
+ c74:	0030 0000 0010 0000 0015 0004 00e0 0000     0...............
+ c84:	0020 0000 0014 0000 0015 0300 8137 0000      ...........7...
+ c94:	0020 0000 0010 0000 0015 0100 0300 aaaa      ...............
+ ca4:	0006 0000 2000 0000 0006 0000 0000 0000     ..... ..........

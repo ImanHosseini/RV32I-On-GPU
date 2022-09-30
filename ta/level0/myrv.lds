@@ -11,9 +11,9 @@ SEARCH_DIR("/opt/riscv/riscv64-unknown-elf/lib");
 SECTIONS
 {
   /* Read-only sections, merged into text segment: */
-  PROVIDE (__executable_start = SEGMENT_START("text-segment", 0x0)); . = SEGMENT_START("text-segment", 0x0) + SIZEOF_HEADERS;
-  .interp         : { *(.interp) }
-  .note.gnu.build-id  : { *(.note.gnu.build-id) }
+  PROVIDE (__executable_start = SEGMENT_START("text-segment", 0x0)); . = SEGMENT_START("text-segment", 0x0);
+  /* .interp         : { *(.interp) } */
+  /* .note.gnu.build-id  : { *(.note.gnu.build-id) }
   .hash           : { *(.hash) }
   .gnu.hash       : { *(.gnu.hash) }
   .dynsym         : { *(.dynsym) }
@@ -46,12 +46,12 @@ SECTIONS
       PROVIDE_HIDDEN (__rela_iplt_start = .);
       *(.rela.iplt)
       PROVIDE_HIDDEN (__rela_iplt_end = .);
-    }
-  .init           :
+    } */
+  /* .init           :
   {
     KEEP (*(SORT_NONE(.init)))
   }
-  .plt            : { *(.plt) *(.iplt) }
+  .plt            : { *(.plt) *(.iplt) } */
   .text           :
   {
     *(.text.unlikely .text.*_unlikely .text.unlikely.*)

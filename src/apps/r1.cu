@@ -17,6 +17,7 @@ const char* r0path = "./ta/level0/t1";
 extern void initialize(REG* &regfile, REG* &pcfile, core_status_t* &svec, cudaStream_t* streams, int np, int nq);
 extern void set_cms(int32_t*);
 extern int32_t calc_mpc(int np, int nq);
+extern void set_cro(uint32_t cro = 0);
 std::vector<std::thread> hths;
 cudaStream_t* cstreams;
 

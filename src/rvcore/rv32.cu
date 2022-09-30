@@ -48,7 +48,8 @@ __device__ inline uint32_t sxtn(uint32_t x, uint32_t b){
 // __constant__ int page_cnt;
 // __constant__ int page_size;
 __constant__ uint32_t core_mem_size;
-// __constant__ uint32_t core_per_grid;
+__constant__ uint32_t cro_size;
+__constant__ uint8_t cmem[CRO_MAX_SIZE];
 #define MEMORY_SLACK 1024*1024*64
 
 // #######################################
@@ -79,7 +80,13 @@ __device__ bool write32(uint32_t addr, uint32_t value, uint8_t* mem, core_status
     // Not implemented yet!
 }
 #else
-__device__ bool read8(uint32_t addr, uint8_t& value, uint8_t* mem, core_status_t& cstatus){
+#ifndef ILV
+__device__ bool read8(uint32_t addr_, uint8_t& value, uint8_t* mem, core_status_t& cstatus){
+    if(addr_ < cro_size){
+        value = *((uint8_t*)(cmem +addr_));
+        return;
+    }
+    uint32_t addr = addr_ - cro_size;
     if(addr >= core_mem_size){
         cstatus.state = ILG_MEMRD;
         cstatus.addr = addr;
@@ -89,7 +96,12 @@ __device__ bool read8(uint32_t addr, uint8_t& value, uint8_t* mem, core_status_t
     return;
 }
 
-__device__ bool read16(uint32_t addr, uint16_t& value, uint8_t* mem, core_status_t& cstatus){
+__device__ bool read16(uint32_t addr_, uint16_t& value, uint8_t* mem, core_status_t& cstatus){
+    if((addr_ + 1) < cro_size){
+        value = *((uint16_t*)(cmem +addr_));
+        return;
+    }
+    uint32_t addr = addr_ - cro_size;
     if((addr + 1) >= core_mem_size){
         cstatus.state = ILG_MEMRD;
         cstatus.addr = addr;
@@ -99,7 +111,12 @@ __device__ bool read16(uint32_t addr, uint16_t& value, uint8_t* mem, core_status
     return;
 }
 
-__device__ bool read32(uint32_t addr, uint32_t& value, uint8_t* mem, core_status_t& cstatus){
+__device__ bool read32(uint32_t addr_, uint32_t& value, uint8_t* mem, core_status_t& cstatus){
+    if((addr_ + 3) < cro_size){
+        value = *((uint32_t*)(cmem +addr_));
+        return;
+    }
+    uint32_t addr = addr_ - cro_size;
     if((addr + 3) >= core_mem_size){
         cstatus.state = ILG_MEMRD;
         cstatus.addr = addr;
@@ -109,9 +126,15 @@ __device__ bool read32(uint32_t addr, uint32_t& value, uint8_t* mem, core_status
     return;
 }
 
-__device__ bool write8(uint32_t addr, uint8_t value, uint8_t* mem, core_status_t& cstatus){
+__device__ bool write8(uint32_t addr_, uint8_t value, uint8_t* mem, core_status_t& cstatus){
+    if(addr_ < cro_size){
+        cstatus.state = ILG_MEMWR_RO;
+        cstatus.addr = addr_;
+        asm("exit;");
+    }
+    uint32_t addr = addr_ - cro_size;
     if(addr >= core_mem_size){
-        cstatus.state = ILG_MEMWR;
+        cstatus.state = ILG_MEMWR_OB;
         cstatus.addr = addr;
         asm("exit;");
     }
@@ -119,9 +142,15 @@ __device__ bool write8(uint32_t addr, uint8_t value, uint8_t* mem, core_status_t
     return;
 }
 
-__device__ bool write16(uint32_t addr, uint16_t value, uint8_t* mem, core_status_t& cstatus){
+__device__ bool write16(uint32_t addr_, uint16_t value, uint8_t* mem, core_status_t& cstatus){
+    if((addr_+1) < cro_size){
+        cstatus.state = ILG_MEMWR_RO;
+        cstatus.addr = addr_;
+        asm("exit;");
+    }
+    uint32_t addr = addr_ - cro_size;
     if((addr + 1) >= core_mem_size){
-        cstatus.state = ILG_MEMWR;
+        cstatus.state = ILG_MEMWR_OB;
         cstatus.addr = addr;
         asm("exit;");
     }
@@ -129,17 +158,25 @@ __device__ bool write16(uint32_t addr, uint16_t value, uint8_t* mem, core_status
     return;
 }
 
-__device__ bool write32(uint32_t addr, uint32_t value, uint8_t* mem, core_status_t& cstatus){
+__device__ bool write32(uint32_t addr_, uint32_t value, uint8_t* mem, core_status_t& cstatus){
+    if((addr_+3) < cro_size){
+        cstatus.state = ILG_MEMWR_RO;
+        cstatus.addr = addr_;
+        asm("exit;");
+    }
+    uint32_t addr = addr_ - cro_size;
     if((addr + 1) >= core_mem_size){
-        cstatus.state = ILG_MEMWR;
+        cstatus.state = ILG_MEMWR_OB;
         cstatus.addr = addr;
         asm("exit;");
     }
     *((uint32_t*)(mem + addr)) = value;
     return;
 }
+#else
+// UNIMPLEMENTED
 #endif
-
+#endif
 /* SYSCALL ARG PASSING: (a0 == x10)
     li    a0, 1               # argument that is used by the syscall
     li    a1, 0               # unused arguments
@@ -168,6 +205,15 @@ void set_cms(int32_t* cms){
     ccE(cudaMemcpyToSymbol(core_mem_size, cms, sizeof(int32_t)));
 }
 
+__global__ void meminit_ilv(uint8_t* src, uint8_t* gmem, uint32_t nc){
+    int tid = blockIdx.x*blockDim.x + threadIdx.x;
+    if(tid >= core_mem_size) return;
+    uint8_t val = src[tid];
+    for(int i = 0; i < nc; i++){
+        gmem[i*nc + tid] = val;
+    }
+}
+
 int32_t calc_mpc(int np, int nq){
     size_t free_memory, total_memory;
     ccE(cudaMemGetInfo(&free_memory,&total_memory));
@@ -179,6 +225,14 @@ int32_t calc_mpc(int np, int nq){
     printf("|Q: %d|Np: %d|Mem/Core: 0x%x|\n", nq, np, mpc);
     ccE(cudaMemcpyToSymbol(core_mem_size, &mpc, sizeof(uint32_t)));
     return mpc;
+}
+
+void set_cro(uint32_t cro = 0){
+    ccE(cudaMemcpyToSymbol(cro_size, &cro, sizeof(uint32_t)));
+}
+
+void init_cmem(void* data, uint32_t size){
+    ccE(cudaMemcpyToSymbol(cmem, data, size));
 }
 
 __device__ inline void stepN(REG *regs, REG& pc, uint8_t *mem, int tid, core_status_t& cstatus)
@@ -706,6 +760,11 @@ other:
 
     return;
 }
+
+// __global__ void reset_svec(core_status_t *svec){
+//     int tid = blockIdx.x * blockDim.x + threadIdx.x;
+//     *(svec + tid) = 0; 
+// }
 
 __launch_bounds__(32)
 __global__ void step(REG *regfile, REG *pcfile, uint8_t *gmem, core_status_t *svec, uint32_t maxstep){

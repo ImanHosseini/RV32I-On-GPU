@@ -27,6 +27,10 @@
 #define ccE(err) err
 #endif
 
+#ifndef CRO_MAX_SIZE
+#define CRO_MAX_SIZE 8*1024
+#endif
+
 inline void __checkCudaErrors(cudaError_t err, const char *file, const int line)
     {
         const char *ename;
@@ -54,7 +58,8 @@ enum CSTATE : uint32_t{
     TRAP,
     ILG_ADDR_PC,
     ILG_MEMRD,
-    ILG_MEMWR,
+    ILG_MEMWR_OB,
+    ILG_MEMWR_RO,
     BAD_INST,
     ECALL
 };

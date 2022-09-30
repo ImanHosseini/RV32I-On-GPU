@@ -11,7 +11,7 @@ LIEF_HOME ?= $(HOME)/lief/LIEF-0.13.0-Linux-x86_64/
 # `sed` is due to moyix influence :)
 getCCAP: 
 	$(eval CCAP := sm_$(shell nvidia-smi --query-gpu=compute_cap --format=csv | tail -n 1 | sed 's/\.//'))
-	echo $(CCAP)
+	@echo CCAP: $(CCAP)
 
 r0: getCCAP
 	nvcc ./src/apps/crvr.cu ./src/rvcore/rv32.cu ./common/util.cu -DDBG -DKDBG0 -I./include -I./common -I$(LIEF_HOME)include -L$(LIEF_HOME)lib -l:libLIEF.a -arch=$(CCAP) -o ./bin/r0
@@ -19,8 +19,16 @@ r0: getCCAP
 r1: getCCAP
 	nvcc -G ./src/apps/r1.cu ./src/rvcore/rv32.cu ./common/util.cu -DDBG -DKDBG0 -I./include -I./common -I$(LIEF_HOME)include -L$(LIEF_HOME)lib -l:libLIEF.a -arch=$(CCAP) -o ./bin/r1
 
-run-tests: run-t0
+r2: getCCAP
+	nvcc -G ./src/apps/r2.cu ./src/rvcore/rv32.cu ./common/util.cu -DDBG -DKDBG0 -I./include -I./common -I$(LIEF_HOME)include -L$(LIEF_HOME)lib -l:libLIEF.a -arch=$(CCAP) -o ./bin/r2
 
+r2_rel: getCCAP
+	nvcc ./src/apps/r2.cu ./src/rvcore/rv32.cu ./common/util.cu -I./include -I./common -I$(LIEF_HOME)include -L$(LIEF_HOME)lib -l:libLIEF.a -arch=$(CCAP) -o ./bin/r2_rel
+
+r3: getCCAP
+	nvcc ./src/apps/r3.cu ./src/rvcore/rv32.cu ./common/util.cu -I./include -I./common -I$(LIEF_HOME)include -L$(LIEF_HOME)lib -l:libLIEF.a -arch=$(CCAP) -o ./bin/r3
+
+run-tests: run-t0
 build-tests: build-t0
 
 build-t0:
