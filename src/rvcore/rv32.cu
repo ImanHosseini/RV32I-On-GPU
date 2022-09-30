@@ -165,7 +165,7 @@ __device__ bool write32(uint32_t addr_, uint32_t value, uint8_t* mem, core_statu
         asm("exit;");
     }
     uint32_t addr = addr_ - cro_size;
-    if((addr + 1) >= core_mem_size){
+    if((addr + 3) >= core_mem_size){
         cstatus.state = ILG_MEMWR_OB;
         cstatus.addr = addr;
         asm("exit;");
