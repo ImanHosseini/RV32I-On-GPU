@@ -28,6 +28,9 @@ r2_rel: getCCAP
 r3: getCCAP
 	nvcc ./src/apps/r3.cu ./src/rvcore/rv32.cu ./common/util.cu -I./include -I./common -I$(LIEF_HOME)include -L$(LIEF_HOME)lib -l:libLIEF.a -arch=$(CCAP) -o ./bin/r3
 
+r3_dbg: getCCAP
+	nvcc -G -DDBG ./src/apps/r3.cu ./src/rvcore/rv32.cu ./common/util.cu -I./include -I./common -I$(LIEF_HOME)include -L$(LIEF_HOME)lib -l:libLIEF.a -arch=$(CCAP) -o ./bin/r3
+
 run-tests: run-t0
 build-tests: build-t0
 
