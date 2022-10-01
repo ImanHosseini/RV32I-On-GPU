@@ -773,7 +773,7 @@ __global__ void step(REG *regfile, REG *pcfile, uint8_t *gmem, core_status_t *sv
     REG *regs = regfile + tid * NUM_OF_REGS;
     // what if pc accesses out of bounds memory?
     REG &pc = *(pcfile + tid);
-    uint8_t* mem = gmem + tid * core_mem_size; 
+    uint8_t* mem = gmem + ((uint64_t) tid) * core_mem_size; 
     core_status_t& cstatus = *(svec + tid);  
     uint32_t iter = 0;
     if(maxstep == 0){
