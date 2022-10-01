@@ -45,7 +45,8 @@ void tX(cudaStream_t s, uint32_t nc, uint32_t mpc, uint32_t pc0, mmc_t mmc, uint
     ccE(cudaMallocAsync(&svec, sizeof(core_status_t)*nc, s));
     // uint32_t fm = dumpM();
     // printf("DELTA: %d\n", free_memory - (np*mpc));
-    ccE(cudaMallocAsync(&gmem, mpc * nc, s));
+    // MPC * NC ~ TOTAL_VRAM / NQ can potentitally be > 4 GB!!
+    ccE(cudaMallocAsync(&gmem, (uint64_t)mpc * nc, s));
     // initPC<<<nc/32, 32, 0, s>>>(pcfile, pc0);
     // initSP<<<nc/32, 32, 0, s>>>(regfile, mpc + cmem_off);
     // prepare the memory
