@@ -116,7 +116,6 @@ __device__ bool read32(uint32_t addr_, uint32_t& value, uint8_t* mem, core_statu
         value = *((uint32_t*)(cmem +addr_));
         return;
     }
-    assert(addr_ >= cro_size);
     uint32_t addr = addr_ - cro_size;
     if((addr + 3) >= core_mem_size){
         cstatus.state = ILG_MEMRD;
