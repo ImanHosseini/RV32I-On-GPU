@@ -24,3 +24,8 @@ What is the boundary between rv32.cu (the core emulator implementation) with the
 
 ## Q3
 MMU/ Coverage/ etc.
+
+## Fermi-ing
+16 GB RAM -> 16Q of 512=<16,32> : 8192 cores, MPC ~ 2MB
+64 KB of constant memory
+MAP_SIZE = (1  << 10) ~ 1 KB of bitmap

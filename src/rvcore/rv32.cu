@@ -276,6 +276,15 @@ __device__ inline void stepN(REG *regs, REG& pc, uint8_t *mem, int tid, core_sta
         INC_PC
         return;
     }
+    case 0x00000027:
+    {
+        // RV32I bid
+        FMT_U
+        DPRINTK("bid x%d, 0x%x\n", rd, imm >> 12);
+        // HANDLE BID FOR COVERAGE
+        INC_PC
+        return;
+    }
     default:
     {
         // DPRINTK("default 0x%x\n",insn);

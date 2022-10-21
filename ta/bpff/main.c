@@ -384,6 +384,6 @@ __attribute__((section(".pkt"))) const u_char pkt[800] = {0x1, 0x2, 0x3, 0x4, 0x
 
 void _start(){
 	const struct bpf_insn* pc = (struct bpf_insn*)bpfidata;
-	int ret = pcap_filter(pc, pkt,10,10);
+	int ret = pcap_filter(pc, pkt, 800, 800);
 	_exit(ret);
 }

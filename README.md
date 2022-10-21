@@ -25,3 +25,8 @@ riscv64-unknown-elf-gcc -mabi=ilp32 -Wl,-Ttext=0x0 -nostdlib -march=rv32im -o t2
 riscv64-unknown-elf-objdump --disassembler-options=no-aliases -M numeric -d t2 > odump2.txt
 spike --isa=rv32imafc -d /opt/riscv/riscv32-unknown-elf/bin/pk t2
 ```
+
+## AFL++
+```
+docker run --rm -it -v $(pwd):"/ta" f29d57145d
+```

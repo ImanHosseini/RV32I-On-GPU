@@ -3,3 +3,10 @@ riscv64-unknown-elf-gcc -mabi=ilp32 -Wl,-T./myrv.lds -nostdlib -march=rv32im -o 
 riscv64-unknown-elf-readelf -a bpff > bpff.relf
 riscv64-unknown-elf-objdump -d bpff > bpff.odump
 see here: https://stackoverflow.com/questions/40884654/allocate-an-array-in-c-a-specific-location-using-linker-commands
+
+
+## AFL
+afl-fuzz -i in -o out ./a.out
+AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1 AFL_SKIP_CPUFREQ=1 afl-fuzz -i in -o out ./a.out
+AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1 AFL_SKIP_CPUFREQ=1 afl-fuzz -i in -o sd ./a.out -M f0
+

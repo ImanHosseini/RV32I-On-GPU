@@ -51,7 +51,7 @@ inline void __checkCudaErrors(cudaError_t err, const char *file, const int line)
 #define XLEN 32
 typedef uint32_t REG;
 
-enum CSTATE : uint32_t{
+enum CSTATE : uint32_t {
     RUNNING,
     EXITED,
     EBREAK,

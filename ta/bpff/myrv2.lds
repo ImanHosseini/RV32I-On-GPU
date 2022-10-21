@@ -20,7 +20,7 @@ ENTRY(_start)
 
 MEMORY
 {
-    cuda_constant : ORIGIN = 0, LENGTH = 4K
+    cuda_constant : ORIGIN = 0, LENGTH = 32K
     cuda_global : ORIGIN = 0, LENGTH = 32K
 }
 
