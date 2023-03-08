@@ -58,7 +58,7 @@ void tX(cudaStream_t s, uint32_t nc, uint32_t mpc, uint32_t pc0, mmc_t mmc, uint
     using random_bytes_engine =
     std::independent_bits_engine<std::default_random_engine, CHAR_BIT,
                                  unsigned char>;
-    random_bytes_engine rbe;
+    random_bytes_engine rbe(0x37);
     std::generate(pkts, pkts+vsize, std::ref(rbe));
     
     for(int i = 0; i < nr; i++){

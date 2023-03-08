@@ -9,6 +9,8 @@ CFLAGS     += -Wall -D_FORTIFY_SOURCE=2 -g -Wno-pointer-sign \
 
 COMM_HDR    = alloc-inl.h config.h debug.h types.h
 
+all: grv-gcc grv-as
+
 grv-gcc: grv-gcc.c $(COMM_HDR)
 	$(CC) $(CFLAGS) $@.c -o $@
 

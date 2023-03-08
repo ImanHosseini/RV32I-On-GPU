@@ -3,6 +3,15 @@
 // RISC-V impl is based on https://github.com/PiMaker/rvc/tree/master/src
 // NEWLIB SYSCALL table: https://github.com/riscvarchive/riscv-newlib/blob/riscv-newlib-3.2.0/libgloss/riscv/machine/syscall.h
 
+#ifdef COV
+#define MAP_SIZE_POW2       12
+constexpr int MAP_SIZE = (1 << MAP_SIZE_POW2);
+constexpr uint16_t MMASK = ((uint16_t)~0) >> (16 - MAP_SIZE_POW2);
+#endif
+
+// supress warning: 'long double' is treated as 'double' in device code
+#pragma nv_diag_suppress 20208
+
 // #######################################
 // ###  Instruction Formats: IBJRSU
 // #######################################
@@ -234,8 +243,11 @@ void set_cro(uint32_t cro = 0){
 void init_cmem(void* data, uint32_t size){
     ccE(cudaMemcpyToSymbol(cmem, data, size));
 }
-
+#ifdef COV
+__device__ inline void stepN(REG *regs, REG& pc, uint8_t *mem, int tid, core_status_t& cstatus, uint16_t& bhsh, uint8_t* covmap)
+#else
 __device__ inline void stepN(REG *regs, REG& pc, uint8_t *mem, int tid, core_status_t& cstatus)
+#endif
 {
     // int tid = blockIdx.x * blockDim.x + threadIdx.x;
     // REG *regs = regfile + tid * NUM_OF_REGS;
@@ -282,6 +294,11 @@ __device__ inline void stepN(REG *regs, REG& pc, uint8_t *mem, int tid, core_sta
         FMT_U
         DPRINTK("bid x%d, 0x%x\n", rd, imm >> 12);
         // HANDLE BID FOR COVERAGE
+        #ifdef COV
+        uint16_t bxx = imm >> 12;
+        bhsh = bxx ^ (bhsh >> 1);
+        covmap[bhsh & MMASK]++;
+        #endif
         INC_PC
         return;
     }
@@ -776,23 +793,37 @@ other:
 // }
 
 __launch_bounds__(32)
-__global__ void step(REG *regfile, REG *pcfile, uint8_t *gmem, core_status_t *svec, uint32_t maxstep){
+#ifndef COV
+__global__ void step(REG *regfile, REG *pcfile, uint8_t *gmem, core_status_t *svec, uint32_t maxstep)
+#else
+__global__ void step(REG *regfile, REG *pcfile, uint8_t *gmem, core_status_t *svec, uint32_t maxstep, uint16_t* bhshmap, uint8_t* gcovmap)
+#endif
+{
     int tid = blockIdx.x * blockDim.x + threadIdx.x;
     // printf("CMS:%d\n",core_mem_size);
     REG *regs = regfile + tid * NUM_OF_REGS;
-    // what if pc accesses out of bounds memory?
     REG &pc = *(pcfile + tid);
     uint8_t* mem = gmem + ((uint64_t) tid) * core_mem_size; 
     core_status_t& cstatus = *(svec + tid);  
     uint32_t iter = 0;
-    if(maxstep == 0){
-        // This is probably unnecessary 
-        while(cstatus.state == RUNNING){
-            stepN(regs, pc, mem, tid, cstatus);
-        }
-    }else{
-        for(; iter < maxstep; iter++){
-            stepN(regs, pc, mem, tid, cstatus);
+    #ifdef COV
+    uint16_t &bhsh = *(bhshmap + tid);
+    uint8_t* covmap = gcovmap + tid * MAP_SIZE;
+    #endif
+    if(cstatus.state == MAXSTEP){
+        cstatus.state = RUNNING;
+    }
+    while(cstatus.state == RUNNING){
+        #ifdef COV
+        stepN(regs, pc, mem, tid, cstatus, bhsh, covmap);
+        #else
+        stepN(regs, pc, mem, tid, cstatus);
+        #endif
+        if(maxstep != 0) {
+            iter++;
+            if(iter >= maxstep){
+                cstatus.state = MAXSTEP;
+            }
         }
     }
     DPRINTK("CST: %d\n", cstatus.state);

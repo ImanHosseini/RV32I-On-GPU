@@ -325,7 +325,7 @@ int main(int argc, char** argv) {
 
   if (isatty(2) && !getenv("GRV_QUIET")) {
 
-    SAYF(cCYA "grv-as " cBRI VERSION cRST " by <lcamtuf@google.com>\n");
+    SAYF(cCYA "grv-as " cBRI VERSION cRST " by <shz230@nyu.edu> based on AFL 2.57b by <lcamtuf@google.com>\n");
  
   } else be_quiet = 1;
 

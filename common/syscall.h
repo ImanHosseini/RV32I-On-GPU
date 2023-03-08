@@ -1,6 +1,10 @@
 #ifndef CDAF139E_AEC9_4512_BC6B_E0459FE393D3
 #define CDAF139E_AEC9_4512_BC6B_E0459FE393D3
 
+#define SYS_malloc 2
+#define SYS_calloc 3
+#define SYS_realloc 4
+#define SYS_free 5
 #define SYS_getcwd 17
 #define SYS_dup 23
 #define SYS_fcntl 25

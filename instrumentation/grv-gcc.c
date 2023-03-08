@@ -56,6 +56,7 @@
 #include <string.h>
 
 static u8*  as_path;                /* Path to the GRV 'as' wrapper      */
+static u8*  as_prefix;
 static u8** cc_params;              /* Parameters passed to the real CC  */
 static u32  cc_par_cnt = 1;         /* Param count, including argv0      */
 static u8   be_quiet;               /* Quiet mode                        */
@@ -68,10 +69,10 @@ static void find_as(u8* argv0) {
 
   u8 *grv_path = getenv("GRV_PATH");
   u8 *slash, *tmp;
-
+  printf("[GRV_PATH]: %s\n", grv_path);
   if (grv_path) {
 
-    tmp = alloc_printf("%s/as", grv_path);
+    tmp = alloc_printf("%s/grv-as", grv_path);
 
     if (!access(tmp, X_OK)) {
       as_path = grv_path;
@@ -83,6 +84,14 @@ static void find_as(u8* argv0) {
 
   }
 
+  tmp = alloc_printf("/usr/bin/grv-as");
+
+  if(!access(tmp, X_OK)){
+    as_path = "/usr/bin";
+    ck_free(tmp);
+    return;
+  }
+
   slash = strrchr(argv0, '/');
 
   if (slash) {
@@ -91,11 +100,14 @@ static void find_as(u8* argv0) {
 
     *slash = 0;
     dir = ck_strdup(argv0);
+    // u8* dir2 = ck_strdup(argv0);
     *slash = '/';
 
     tmp = alloc_printf("%s/grv-as", dir);
+    
 
     if (!access(tmp, X_OK)) {
+      // tmp = alloc_printf("%s/grv-", dir2);
       as_path = dir;
       ck_free(tmp);
       return;
@@ -106,7 +118,7 @@ static void find_as(u8* argv0) {
 
   }
 
-  if (!access(GRV_PATH "/as", X_OK)) {
+  if (!access(GRV_PATH "/grv-as", X_OK)) {
     as_path = GRV_PATH;
     return;
   }
@@ -145,7 +157,9 @@ static void edit_params(u32 argc, char** argv) {
   }
 
   cc_params[cc_par_cnt++] = "-B";
-  cc_params[cc_par_cnt++] = as_path;
+  as_prefix = alloc_printf("%s/grv-", as_path);
+  cc_params[cc_par_cnt++] = as_prefix;
+  printf("[AS_PATH]: %s\n",as_path);
 
   if (!getenv("GRV_DONT_OPTIMIZE")) {
     cc_params[cc_par_cnt++] = "-O3";
@@ -175,7 +189,7 @@ int main(int argc, char** argv) {
 
   if (isatty(2) && !getenv("GRV_QUIET")) {
 
-    SAYF(cCYA "grv-cc " cBRI VERSION cRST " by <lcamtuf@google.com>\n");
+    SAYF(cCYA "grv-cc " cBRI VERSION cRST " by <shz230@nyu.edu> based on AFL 2.57b by <lcamtuf@google.com>\n");
 
   } else be_quiet = 1;
 
