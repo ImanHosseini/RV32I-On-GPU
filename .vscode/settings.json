@@ -64,6 +64,10 @@
         "locale": "cpp",
         "__config": "cpp",
         "compare": "cpp",
-        "__nullptr": "cpp"
+        "__nullptr": "cpp",
+        "concepts": "cpp",
+        "__bits": "cpp",
+        "__debug": "cpp",
+        "__tuple": "cpp"
     }
 }

@@ -11,7 +11,7 @@
                 "/home/iman/projs/gvz/imtui/include",
                 "/home/iman/projs/gvz/imtui/third-party/imgui"
             ],
-            "defines": [],
+            // "defines": ["DBGX"],
             "compilerPath": "/usr/local/cuda-11.8/bin/nvcc",
             "cStandard": "c17",
             "intelliSenseMode": "linux-clang-x64",

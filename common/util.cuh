@@ -54,37 +54,30 @@ inline void __checkCudaErrors(cudaError_t err, const char *file, const int line)
 #define XLEN 32
 typedef uint32_t REG;
 
+#define CSTATE_ENUM_VALUES \
+    X(RUNNING)              \
+    X(MAXSTEP)              \
+    X(EXITED)               \
+    X(EBREAK)               \
+    X(TRAP)                 \
+    X(ILG_ADDR_PC)          \
+    X(ILG_MEMRD)            \
+    X(ILG_MEMWR_OB)         \
+    X(ILG_MEMWR_RO)         \
+    X(BAD_INST)             \
+    X(ECALL)                \
+    X(BKPT)
+
+// Create the enum
 enum CSTATE : uint32_t {
-    MAXSTEP,
-    RUNNING,
-    EXITED,
-    EBREAK,
-    TRAP,
-    ILG_ADDR_PC,
-    ILG_MEMRD,
-    ILG_MEMWR_OB, // out of bound
-    ILG_MEMWR_RO, // read-only
-    BAD_INST,
-    ECALL
+#define X(name) name,
+    CSTATE_ENUM_VALUES
+#undef X
+    CSTATE_COUNT
 };
 
-inline const char* ToString(CSTATE v)
-{
-    switch (v)
-    {
-        case MAXSTEP:   return "MAXSTEP";
-        case RUNNING:   return "RUNNING";
-        case EXITED:   return "EXITED";
-        case EBREAK:   return "EBREAK";
-        case TRAP:   return "TRAP";
-        case ILG_ADDR_PC:   return "ILG_ADDR_PC";
-        case ILG_MEMRD:   return "ILG_MEMRD";
-        case ILG_MEMWR_OB:   return "ILG_MEMWR_OB";
-        case ILG_MEMWR_RO:   return "ILG_MEMWR_RO";
-        case BAD_INST:   return "BAD_INST";
-        default:      return "[Unknown CSTATE]";
-    }
-}
+extern const char* CSTATE_STRINGS[];
+const char* CStateToString(CSTATE state);
 
 // where to put a bunch of debugging funcs?
 inline int32_t dumpM(){
@@ -117,4 +110,12 @@ __global__ void initPC(REG* pcfile, REG val);
 __global__ void initSP(REG* pcfile, uint32_t addr);
 extern const char* banner;
 
-extern __global__ void step(REG *regfile, REG *pcfile, uint8_t *gmem, core_status_t *svec, uint32_t maxstep);
+#ifdef DBGX
+extern __global__ void step(REG *regfile, REG *pcfile, uint8_t *gmem, core_status_t *svec, uint32_t maxstep = 0, uint32_t* bkpts = nullptr, int num_bkpts = 0);
+#else
+#ifndef COV
+extern __global__ void step(REG *regfile, REG *pcfile, uint8_t *gmem, core_status_t *svec, uint32_t maxstep = 0);
+#else
+extern void step(REG *regfile, REG *pcfile, uint8_t *gmem, core_status_t *svec, uint32_t maxstep, uint16_t* bhshmap, uint8_t* gcovmap);
+#endif
+#endif

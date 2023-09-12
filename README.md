@@ -30,3 +30,8 @@ spike --isa=rv32imafc -d /opt/riscv/riscv32-unknown-elf/bin/pk t2
 ```
 docker run --rm -it -v $(pwd):"/ta" f29d57145d
 ```
+
+## DISEMMINATION
+[Seventh Workshop on Computer Architecture Research with RISC-V (CARRV 2023)](https://carrv.github.io/2023/)
+USENIX ATC? (The home of the legendary QEMU paper)
+[VectorVisor - USENIX ATC'23](https://www.usenix.org/conference/atc23/presentation/ginzburg)

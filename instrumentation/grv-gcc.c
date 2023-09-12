@@ -65,6 +65,19 @@ static u8   be_quiet;               /* Quiet mode                        */
 /* Try to find our "fake" GNU assembler in GRV_PATH or at the location derived
    from argv[0]. If that fails, abort. */
 
+
+static u8 flag_consume(char** argv, const char* flag) {
+    int found = 0;
+    for (int i = 0; argv[i] != NULL; ++i) {
+        if (strcmp(argv[i], flag) == 0) {
+            found = 1;
+            // Replace the flag with an empty string
+            argv[i] = "";
+        }
+    }
+    return found;
+}
+
 static void find_as(u8* argv0) {
 
   u8 *grv_path = getenv("GRV_PATH");
@@ -179,6 +192,8 @@ static void edit_params(u32 argc, char** argv) {
   //   cc_params[cc_par_cnt++] = "-fno-builtin-strstr";
   //   cc_params[cc_par_cnt++] = "-fno-builtin-strcasestr";
   // }
+  // cc_params[cc_par_cnt++] = "-T";
+  // cc_params[cc_par_cnt++] = "grv_ls.lds";
   cc_params[cc_par_cnt] = NULL;
 }
 
@@ -208,8 +223,12 @@ int main(int argc, char** argv) {
 
     exit(1);
   }
-
-  find_as(argv[0]);
+  u8 xcov = flag_consume(argv, "-xcov");
+  if(xcov){
+    find_as(argv[0]);
+  } else {
+    as_path = "riscv64-unknown-elf-as";
+  }
   printf("FOUND AS in: %s\n", as_path);
   edit_params(argc, argv);
   printf("execvp.. (%s)\n", cc_params[0]);

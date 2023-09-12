@@ -47,8 +47,6 @@ void tX(cudaStream_t s, uint32_t nc, uint32_t mpc, uint32_t pc0, mmc_t mmc, uint
     // printf("DELTA: %d\n", free_memory - (np*mpc));
     // MPC * NC ~ TOTAL_VRAM / NQ can potentitally be > 4 GB!!
     ccE(cudaMallocAsync(&gmem, (uint64_t)mpc * nc, s));
-    // initPC<<<nc/32, 32, 0, s>>>(pcfile, pc0);
-    // initSP<<<nc/32, 32, 0, s>>>(regfile, mpc + cmem_off);
     // prepare the memory
     // this is the "packet" -> fill with random? fill with random fast using gpu random? - no. 
     mts_t mts = mmc[0];
@@ -61,12 +59,12 @@ void tX(cudaStream_t s, uint32_t nc, uint32_t mpc, uint32_t pc0, mmc_t mmc, uint
     random_bytes_engine rbe(0x37);
     std::generate(pkts, pkts+vsize, std::ref(rbe));
     
-    for(int i = 0; i < nr; i++){
+    for(int i = 0; i < nr; i++) {
         ccE(cudaMemcpyAsync(gmem + addr, pkts + i*vsize, vsize, cudaMemcpyHostToDevice, s));
         initPC<<<nc/32, 32, 0, s>>>(pcfile, pc0);
         initSP<<<nc/32, 32, 0, s>>>(regfile, mpc + cmem_off);
         ccE(cudaMemsetAsync(svec, 0x0, sizeof(core_status_t)*nc, s));
-        step<<<nc/32, 32, 0, s>>>(regfile, pcfile, gmem, svec, 0);
+        step<<<nc/32, 32, 0, s>>>(regfile, pcfile, gmem, svec);
     }
     // print statuses
     if(print_final_status){

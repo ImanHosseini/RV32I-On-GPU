@@ -54,8 +54,6 @@ __device__ inline uint32_t sxtn(uint32_t x, uint32_t b){
 }
 
 // For MMU?
-// __constant__ int page_cnt;
-// __constant__ int page_size;
 __constant__ uint32_t core_mem_size;
 __constant__ uint32_t cro_size;
 __constant__ uint8_t cmem[CRO_MAX_SIZE];
@@ -792,6 +790,44 @@ other:
 //     *(svec + tid) = 0; 
 // }
 
+#ifdef DBGX
+
+__device__ bool check_bkpt(uint32_t pc, uint32_t* bkpts, int num_bkpts){
+    for(int i = 0; i < num_bkpts; i++){
+        if(pc == bkpts[i]){
+            return true;
+        }
+    }
+    return false;
+}
+
+__launch_bounds__(32) __global__ void step(REG *regfile, REG *pcfile, uint8_t *gmem, core_status_t *svec, uint32_t maxstep = 0, uint32_t* bkpts = nullptr, int num_bkpts = 0) {
+    int tid = blockIdx.x * blockDim.x + threadIdx.x;
+    REG *regs = regfile + tid * NUM_OF_REGS;
+    REG &pc = *(pcfile + tid);
+    uint8_t* mem = gmem + ((uint64_t) tid) * core_mem_size; 
+    core_status_t& cstatus = *(svec + tid);  
+    uint32_t iter = 0;
+    if(cstatus.state == MAXSTEP || cstatus.state == BKPT){
+        cstatus.state = RUNNING;
+    }
+    while(cstatus.state == RUNNING){
+        stepN(regs, pc, mem, tid, cstatus);
+        if(check_bkpt(pc, bkpts, num_bkpts)){
+            cstatus.state = BKPT;
+            cstatus.addr = pc;
+            break;
+        }
+        if(maxstep != 0) {
+            iter++;
+            if(iter >= maxstep){
+                cstatus.state = MAXSTEP;
+            }
+        }
+    }
+    DPRINTK("CST: %d\n", cstatus.state);
+}
+#else
 __launch_bounds__(32)
 #ifndef COV
 __global__ void step(REG *regfile, REG *pcfile, uint8_t *gmem, core_status_t *svec, uint32_t maxstep)
@@ -828,3 +864,5 @@ __global__ void step(REG *regfile, REG *pcfile, uint8_t *gmem, core_status_t *sv
     }
     DPRINTK("CST: %d\n", cstatus.state);
 }
+#endif
+

@@ -28,20 +28,24 @@ ENTRY(_start)
 }
 */
 
-
+PHDRS
+{
+  cuda_constant PT_LOAD;
+  cuda_global PT_LOAD;
+}
 
 /* MEMORY
 {
-    cuda_constant : ORIGIN = 0x0, LENGTH = 64K
-    cuda_global : ORIGIN = 0x400000, LENGTH = 0x400000
+    cuda_constant (r) : ORIGIN = 0x0, LENGTH = 64K
+    cuda_global (rw) : ORIGIN = 0x400000, LENGTH = 0x400000
 } */
 
 SECTIONS
 {
     /* /DISCARD/ 0 (NOLOAD) : {*(.eh_frame)} */
     __global_pointer$ = .;
-    .cuda_constant 0x0 : {*(.lib_constant) *(.cuda_constant) *(.text) *(.text.*) *(.rodata) *(.rodata.*) *(.srodata.*) *(.srodata.*) *(.fdata)} 
+    .cuda_constant 0x0 : {*(.lib_constant) *(.cuda_constant) *(.text) *(.text.*) *(.rodata) *(.rodata.*) *(.srodata.*) *(.srodata.*) *(.fdata)} :cuda_constant
     _edata = .; PROVIDE (edata = .);
-    .cuda_global . : {*(.cuda_global) *(.pkt) *(.sdata) *(.fini_array) *(.init_array) *(.init_array.*) *(.sdata.*) *(.bss) *(.bss.*) *(.sbss) *(.sbss.*) *(.data.*) *(.eh_frame) *(*)} 
+    .cuda_global . : {*(.cuda_global) *(.pkt) *(.sdata) *(.fini_array) *(.init_array) *(.init_array.*) *(.sdata.*) *(.bss) *(.bss.*) *(.sbss) *(.sbss.*) *(.data.*) *(.eh_frame) *(*)} :cuda_global
     _end = .; PROVIDE (end = .);
 }

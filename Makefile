@@ -9,6 +9,9 @@ APPS=./src/apps
 ZLIB_DIR=
 MARCH=rv32im
 
+# BINUTILS_BIN:=/home/iman/projs/riscv-gnu-toolchain/build-binutils-newlib
+# BINUTILS_SRC:=/home/iman/projs/riscv-gnu-toolchain/binutils
+# DISMAN_FLAGS=-I $(BINUTILS_BIN)/bfd -I $(BINUTILS_SRC)/include -L $(BINUTILS_BIN)/zlib -L $(BINUTILS_BIN)/libiberty  $(BINUTILS_BIN)/opcodes/libopcodes.a $(BINUTILS_BIN)/bfd//.libs/libbfd.a -liberty -lz -ldl
 # TODO: make this makefile less crappy
 # maybe have Makefiles in different dirs? how does that work?
 # get gpu CC: nvidia-smi --query-gpu=compute_cap --format=csv
@@ -37,8 +40,14 @@ r2_rel: getCCAP
 r3: getCCAP
 	nvcc $(APPS)/r3.cu ./src/rvcore/rv32.cu ./common/util.cu -I./include -I./common -I$(LIEF_HOME)include -L$(LIEF_HOME)lib -l:libLIEF.a -arch=$(CCAP) -o ./bin/r3
 
+managed0: getCCAP
+	nvcc $(APPS)/managed0.cu ./src/rvcore/rv32.cu ./common/util.cu -I./include -I./common -I$(LIEF_HOME)include -L$(LIEF_HOME)lib -l:libLIEF.a -arch=$(CCAP) -o ./bin/managed0
+
 r3dbg: getCCAP
-	nvcc -G -DDBG -DKDBG0 $(APPS)/r3.cu ./src/rvcore/rv32.cu ./common/util.cu -I./include -I./common -I$(LIEF_HOME)include -L$(LIEF_HOME)lib -l:libLIEF.a -arch=$(CCAP) -o ./bin/r3dbg
+	nvcc -G -g -DDBG -DKDBG0 $(APPS)/r3.cu ./src/rvcore/rv32.cu ./common/util.cu -I./include -I./common -I$(LIEF_HOME)include -L$(LIEF_HOME)lib -l:libLIEF.a -arch=$(CCAP) -o ./bin/r3dbg
+
+m0dbg: getCCAP
+	nvcc -G -g -DDBG -DKDBG0 -DDBGX $(APPS)/m0.cu ./src/rvcore/rv32.cu ./common/util.cu -I./include -I./common -I$(LIEF_HOME)include -L$(LIEF_HOME)lib -l:libLIEF.a -lfmt -arch=$(CCAP) -o ./bin/m0dbg
 
 r3cov: getCCAP
 	nvcc $(APPS)/r3cov.cu ./src/rvcore/rv32.cu ./common/util.cu -DCOV -I./include -I./common -I$(LIEF_HOME)include -L$(LIEF_HOME)lib -l:libLIEF.a -arch=$(CCAP) -o ./bin/r3cov
