@@ -1,3 +1,3 @@
-#include <stdint.h>
+#include <util.cuh>
 
-__device__ __host__ void dumpInstruction(uint32_t insn);
+__global__ void dumpS(REG *regfile, REG *pcfile, uint8_t *gmem, core_status_t *svec, int coreid);

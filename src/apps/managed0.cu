@@ -8,10 +8,11 @@
 #include <tuple>
 #include <random>
 #include <chrono>
-
+#include <mutex>
+#include <stack>
 #include <LIEF/ELF.hpp>
 #include <LIEF/logging.hpp>
-#define CORE_GMEM_SIZE 1024*1024*16
+#define CORE_GMEM_SIZE (size_t) 1024*1024*16*8
 
 using namespace LIEF::ELF;
 const char* r0path = "./ta/bin/hello";
@@ -31,18 +32,23 @@ bool print_final_status = false;
 uint32_t cmem_off = 0;
 uint32_t cro_spill = 0;
 uint8_t* gmembase = NULL;
-int np, nq;
+uint32_t np, nq;
 uint8_t* gmem_pool;
+std::mutex mtx;
+
+std::unordered_map<uint32_t, std::string> symmap;   
 
 void tX(cudaStream_t s, uint32_t nc, uint32_t mpc, uint32_t pc0, mmc_t mmc, int qnum)
 {
     REG *regfile, *pcfile;
+    REG* pc0_h = (REG*)malloc(sizeof(REG));
+    std::stack<std::string> backtrace;
     core_status_t* svec;
-    uint8_t* gmem = gmem_pool + (CORE_GMEM_SIZE * (np / nq) * qnum);
+    uint8_t* gmem = gmem_pool + (CORE_GMEM_SIZE * nc * qnum);
+    printf("%x\n", gmem_pool[128]);
     ccE(cudaMallocAsync(&regfile, NUM_OF_REGS*sizeof(REG)*nc, s));
     ccE(cudaMallocAsync(&pcfile, sizeof(REG)*nc, s));
     ccE(cudaMallocAsync(&svec, sizeof(core_status_t)*nc, s));
-    ccE(cudaMallocAsync(&gmem, (uint64_t)mpc * nc, s));
     printf("mmc.size(): %zu\n", mmc.size());
     assert(mmc.size() <= 1);
     mts_t mts = mmc[0];
@@ -52,35 +58,73 @@ void tX(cudaStream_t s, uint32_t nc, uint32_t mpc, uint32_t pc0, mmc_t mmc, int 
     for(int i = 0; i < nc; i++) {   
         // allocate the spill
         if(cro_spill) {
-            ccE(cudaMemcpyAsync(gmem + CORE_GMEM_SIZE * i, cuda_constant_seg + CRO_MAX_SIZE, cro_spill, cudaMemcpyHostToDevice, s));
+            ccE(cudaMemcpyAsync(gmem + CORE_GMEM_SIZE * i, cuda_constant_seg + CRO_MAX_SIZE, cro_spill, cudaMemcpyDefault, s));
         }
-        ccE(cudaMemcpyAsync(gmem + CORE_GMEM_SIZE * i + addr, gdata, vsize, cudaMemcpyHostToDevice, s));
+        // printf("[%d] gmem dst: %p, gdata: %p, addr: %#x, vsize: %#x\n", qnum, gmem + CORE_GMEM_SIZE * i + addr, gdata, addr, vsize);
+        ccE(cudaMemcpyAsync(gmem + CORE_GMEM_SIZE * i + addr, (void*)gdata, vsize, cudaMemcpyDefault, s));
     }
     // execute
     initPC<<<nc/32, 32, 0, s>>>(pcfile, pc0);
-    initSP<<<nc/32, 32, 0, s>>>(regfile, CORE_GMEM_SIZE + cmem_off + cro_spill);
+    initSP<<<nc/32, 32, 0, s>>>(regfile, cmem_off + addr);
     ccE(cudaMemsetAsync(svec, 0x0, sizeof(core_status_t)*nc, s));
-    step<<<nc/32, 32, 0, s>>>(regfile, pcfile, gmem, svec);
     core_status_t* svec_h = (core_status_t*)malloc(sizeof(core_status_t) * nc);
-    ccE(cudaMemcpyAsync(svec_h, svec, sizeof(core_status_t) * nc, cudaMemcpyDeviceToHost));
+    // ccE(cudaMemcpyAsync(svec_h, svec, sizeof(core_status_t) * nc, cudaMemcpyDeviceToHost));
     ccE(cudaStreamSynchronize(s));
-    for(int i = 0; i < nc; i++) {
-        printf("core[%2d]: [%s]\n", i + qnum*nc, CStateToString(svec_h[i].state));
+    if(qnum != 0) return;
+    bool* pop_bt;
+    ccE(cudaMallocManaged(&pop_bt, sizeof(bool)));
+    mtx.lock();
+    for(int i = 0; i < 512; i++) {
+        step<<<nc/32, 32, 0, s>>>(regfile, pcfile, gmem, svec, 1);
+        ccE(cudaMemcpyAsync(svec_h, svec, sizeof(core_status_t) * nc, cudaMemcpyDeviceToHost, s));
+        ccE(cudaDeviceSynchronize());
+        // printf("t[%2d]: <[%s], %#x>\n", i + qnum*nc, CStateToString(svec_h[0].state), svec_h[0].addr);
+        dumpS<<<1, 1, 0, s>>>(regfile, pcfile, gmem, svec, 0, pop_bt);
+        ccE(cudaMemcpyAsync(pc0_h, pcfile, sizeof(REG), cudaMemcpyDeviceToHost, s));
+        ccE(cudaDeviceSynchronize());
+        if(*pop_bt) {
+            printf("pop_bt\n");
+            if(backtrace.size() > 0) {
+                backtrace.pop();
+            }
+        } else {
+            if(symmap.find(*pc0_h) != symmap.end()) {
+                printf("pushing: %s\n", symmap[*pc0_h].c_str());
+                backtrace.push(symmap[*pc0_h]);
+            }
+        }
+        if(svec_h[0].state != MAXSTEP) {
+            printf("t[%2d]: <[%s], %#x>\n", i + qnum*nc, CStateToString(svec_h[0].state), svec_h[0].addr);
+            printf("BACKTRACE:\n");
+            while(backtrace.size() > 0) {
+                printf("\t%s\n", backtrace.top().c_str());
+                backtrace.pop();
+            }
+            break;
+        }
     }
+    mtx.unlock();
 }
 
 int main(int argc, char* argv[]) {
     argh::parser cmdl(argv);
     std::string fpath;
     // np is total # of processes - will be divided over nq Queues
-    cmdl("np", 512) >> np;
-    cmdl("nq", 4) >> nq;
+    cmdl("np", 64) >> np;
+    cmdl("nq", 2) >> nq;
     cmdl("f", std::string(r0path)) >> fpath;
     uint32_t pc0;
     std::unique_ptr<const Binary> binary = std::unique_ptr<const Binary>{Parser::parse(fpath)};
     pc0 = binary->entrypoint();
     mmc_t mmc;
     // load the binary
+    LIEF::ELF::Binary::it_const_symbols symbols = binary->symbols();
+    for(const Symbol& symbol : symbols) {
+        if(symbol.type() == LIEF::ELF::ELF_SYMBOL_TYPES::STT_FUNC) {
+            printf("symbol: %s, addr: %#x\n", symbol.name().c_str(), symbol.value());
+            symmap[symbol.value()] = symbol.name();
+        }
+    }
     for (const Segment& segment : binary->segments()) {
         uint64_t addr = segment.virtual_address();
         uint64_t vsize = segment.virtual_size();

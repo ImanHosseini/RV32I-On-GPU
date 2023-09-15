@@ -1,0 +1,35 @@
+Using built-in specs.
+COLLECT_GCC=riscv64-unknown-elf-gcc
+COLLECT_LTO_WRAPPER=/home/iman/riscv_test_build/libexec/gcc/riscv64-unknown-elf/12.1.0/lto-wrapper
+Target: riscv64-unknown-elf
+Configured with: /home/iman/projs/riscv-gnu-toolchain/gcc/configure --target=riscv64-unknown-elf --prefix=/home/iman/riscv_test_build --disable-shared --disable-threads --enable-languages=c,c++ --with-pkgversion=g1ea978e3066 --with-system-zlib --enable-tls --with-newlib --with-sysroot=/home/iman/riscv_test_build/riscv64-unknown-elf --with-native-system-header-dir=/include --disable-libmudflap --disable-libssp --disable-libquadmath --disable-libgomp --disable-nls --disable-tm-clone-registry --src=/home/iman/projs/riscv-gnu-toolchain/gcc --enable-multilib --with-multilib-generator=rv32im-ilp32-- --with-abi=lp64d --with-arch=rv64imafdc --with-tune=rocket --with-isa-spec=2.2 'CFLAGS_FOR_TARGET=-Os   -mcmodel=medlow' 'CXXFLAGS_FOR_TARGET=-Os   -mcmodel=medlow'
+Thread model: single
+Supported LTO compression algorithms: zlib
+gcc version 12.1.0 (g1ea978e3066) 
+COLLECT_GCC_OPTIONS='-v' '-save-temps' '-mabi=ilp32' '-march=rv32im' '-o' '/home/iman/gRV/CRV2/ta/bin/hello' '-mtune=rocket' '-misa-spec=2.2' '-march=rv32im' '-dumpdir' '/home/iman/gRV/CRV2/ta/bin/'
+ /home/iman/riscv_test_build/libexec/gcc/riscv64-unknown-elf/12.1.0/cc1 -E -quiet -v -imultilib rv32im/ilp32 /home/iman/gRV/CRV2/ta/misc/hello.c -mabi=ilp32 -march=rv32im -mtune=rocket -misa-spec=2.2 -march=rv32im -fpch-preprocess -o /home/iman/gRV/CRV2/ta/bin/hello.i
+ignoring nonexistent directory "/home/iman/riscv_test_build/riscv64-unknown-elf/usr/local/include"
+ignoring duplicate directory "/home/iman/riscv_test_build/riscv64-unknown-elf/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /home/iman/riscv_test_build/lib/gcc/riscv64-unknown-elf/12.1.0/include
+ /home/iman/riscv_test_build/lib/gcc/riscv64-unknown-elf/12.1.0/include-fixed
+ /home/iman/riscv_test_build/lib/gcc/riscv64-unknown-elf/12.1.0/../../../../riscv64-unknown-elf/include
+End of search list.
+COLLECT_GCC_OPTIONS='-v' '-save-temps' '-mabi=ilp32' '-march=rv32im' '-o' '/home/iman/gRV/CRV2/ta/bin/hello' '-mtune=rocket' '-misa-spec=2.2' '-march=rv32im' '-dumpdir' '/home/iman/gRV/CRV2/ta/bin/'
+ /home/iman/riscv_test_build/libexec/gcc/riscv64-unknown-elf/12.1.0/cc1 -fpreprocessed /home/iman/gRV/CRV2/ta/bin/hello.i -quiet -dumpdir /home/iman/gRV/CRV2/ta/bin/ -dumpbase hello.c -dumpbase-ext .c -mabi=ilp32 -march=rv32im -mtune=rocket -misa-spec=2.2 -march=rv32im -version -o /home/iman/gRV/CRV2/ta/bin/hello.s
+GNU C17 (g1ea978e3066) version 12.1.0 (riscv64-unknown-elf)
+	compiled by GNU C version 9.4.0, GMP version 6.2.0, MPFR version 4.0.2, MPC version 1.1.0, isl version none
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+GNU C17 (g1ea978e3066) version 12.1.0 (riscv64-unknown-elf)
+	compiled by GNU C version 9.4.0, GMP version 6.2.0, MPFR version 4.0.2, MPC version 1.1.0, isl version none
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: 30059d50657e57c30b76e27bdd42dc09
+COLLECT_GCC_OPTIONS='-v' '-save-temps' '-mabi=ilp32' '-march=rv32im' '-o' '/home/iman/gRV/CRV2/ta/bin/hello' '-mtune=rocket' '-misa-spec=2.2' '-march=rv32im' '-dumpdir' '/home/iman/gRV/CRV2/ta/bin/'
+ /home/iman/riscv_test_build/lib/gcc/riscv64-unknown-elf/12.1.0/../../../../riscv64-unknown-elf/bin/as -v --traditional-format -march=rv32im -march=rv32im -mabi=ilp32 -misa-spec=2.2 -o /home/iman/gRV/CRV2/ta/bin/hello.o /home/iman/gRV/CRV2/ta/bin/hello.s
+GNU assembler version 2.39 (riscv64-unknown-elf) using BFD version (GNU Binutils) 2.39
+COMPILER_PATH=/home/iman/riscv_test_build/libexec/gcc/riscv64-unknown-elf/12.1.0/:/home/iman/riscv_test_build/libexec/gcc/riscv64-unknown-elf/12.1.0/:/home/iman/riscv_test_build/libexec/gcc/riscv64-unknown-elf/:/home/iman/riscv_test_build/lib/gcc/riscv64-unknown-elf/12.1.0/:/home/iman/riscv_test_build/lib/gcc/riscv64-unknown-elf/:/home/iman/riscv_test_build/lib/gcc/riscv64-unknown-elf/12.1.0/../../../../riscv64-unknown-elf/bin/
+LIBRARY_PATH=/home/iman/riscv_test_build/lib/gcc/riscv64-unknown-elf/12.1.0/rv32im/ilp32/:/home/iman/riscv_test_build/lib/gcc/riscv64-unknown-elf/12.1.0/../../../../riscv64-unknown-elf/lib/rv32im/ilp32/:/home/iman/riscv_test_build/riscv64-unknown-elf/lib/rv32im/ilp32/:/home/iman/riscv_test_build/lib/gcc/riscv64-unknown-elf/12.1.0/:/home/iman/riscv_test_build/lib/gcc/riscv64-unknown-elf/12.1.0/../../../../riscv64-unknown-elf/lib/:/home/iman/riscv_test_build/riscv64-unknown-elf/lib/
+COLLECT_GCC_OPTIONS='-v' '-save-temps' '-mabi=ilp32' '-march=rv32im' '-o' '/home/iman/gRV/CRV2/ta/bin/hello' '-mtune=rocket' '-misa-spec=2.2' '-march=rv32im' '-dumpdir' '/home/iman/gRV/CRV2/ta/bin/hello.'
+ /home/iman/riscv_test_build/libexec/gcc/riscv64-unknown-elf/12.1.0/collect2 -plugin /home/iman/riscv_test_build/libexec/gcc/riscv64-unknown-elf/12.1.0/liblto_plugin.so -plugin-opt=/home/iman/riscv_test_build/libexec/gcc/riscv64-unknown-elf/12.1.0/lto-wrapper -plugin-opt=-fresolution=/home/iman/gRV/CRV2/ta/bin/hello.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgloss -plugin-opt=-pass-through=-lgcc --sysroot=/home/iman/riscv_test_build/riscv64-unknown-elf -melf32lriscv -o /home/iman/gRV/CRV2/ta/bin/hello /home/iman/riscv_test_build/lib/gcc/riscv64-unknown-elf/12.1.0/../../../../riscv64-unknown-elf/lib/rv32im/ilp32/crt0.o /home/iman/riscv_test_build/lib/gcc/riscv64-unknown-elf/12.1.0/rv32im/ilp32/crtbegin.o -L/home/iman/riscv_test_build/lib/gcc/riscv64-unknown-elf/12.1.0/rv32im/ilp32 -L/home/iman/riscv_test_build/lib/gcc/riscv64-unknown-elf/12.1.0/../../../../riscv64-unknown-elf/lib/rv32im/ilp32 -L/home/iman/riscv_test_build/riscv64-unknown-elf/lib/rv32im/ilp32 -L/home/iman/riscv_test_build/lib/gcc/riscv64-unknown-elf/12.1.0 -L/home/iman/riscv_test_build/lib/gcc/riscv64-unknown-elf/12.1.0/../../../../riscv64-unknown-elf/lib -L/home/iman/riscv_test_build/riscv64-unknown-elf/lib -T/home/iman/gRV/CRV2/ta/grv_ls.lds /home/iman/gRV/CRV2/ta/bin/hello.o -lgcc --start-group -lc -lgloss --end-group -lgcc /home/iman/riscv_test_build/lib/gcc/riscv64-unknown-elf/12.1.0/rv32im/ilp32/crtend.o
+COLLECT_GCC_OPTIONS='-v' '-save-temps' '-mabi=ilp32' '-march=rv32im' '-o' '/home/iman/gRV/CRV2/ta/bin/hello' '-mtune=rocket' '-misa-spec=2.2' '-march=rv32im' '-dumpdir' '/home/iman/gRV/CRV2/ta/bin/hello.'

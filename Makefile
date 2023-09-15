@@ -41,7 +41,7 @@ r3: getCCAP
 	nvcc $(APPS)/r3.cu ./src/rvcore/rv32.cu ./common/util.cu -I./include -I./common -I$(LIEF_HOME)include -L$(LIEF_HOME)lib -l:libLIEF.a -arch=$(CCAP) -o ./bin/r3
 
 managed0: getCCAP
-	nvcc $(APPS)/managed0.cu ./src/rvcore/rv32.cu ./common/util.cu -I./include -I./common -I$(LIEF_HOME)include -L$(LIEF_HOME)lib -l:libLIEF.a -arch=$(CCAP) -o ./bin/managed0
+	nvcc -g -DDBG -DKDBG0 $(APPS)/managed0.cu ./src/rvcore/rv32.cu ./common/util.cu -I./include -I./common -I$(LIEF_HOME)include -L$(LIEF_HOME)lib -l:libLIEF.a -arch=$(CCAP) -o ./bin/managed0
 
 r3dbg: getCCAP
 	nvcc -G -g -DDBG -DKDBG0 $(APPS)/r3.cu ./src/rvcore/rv32.cu ./common/util.cu -I./include -I./common -I$(LIEF_HOME)include -L$(LIEF_HOME)lib -l:libLIEF.a -arch=$(CCAP) -o ./bin/r3dbg

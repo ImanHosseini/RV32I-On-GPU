@@ -119,3 +119,5 @@ extern __global__ void step(REG *regfile, REG *pcfile, uint8_t *gmem, core_statu
 extern void step(REG *regfile, REG *pcfile, uint8_t *gmem, core_status_t *svec, uint32_t maxstep, uint16_t* bhshmap, uint8_t* gcovmap);
 #endif
 #endif
+
+extern __global__ void dumpS(REG *regfile, REG *pcfile, uint8_t *gmem, core_status_t *svec, int coreid, bool* pop_bt);

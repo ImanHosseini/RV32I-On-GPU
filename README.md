@@ -31,6 +31,12 @@ spike --isa=rv32imafc -d /opt/riscv/riscv32-unknown-elf/bin/pk t2
 docker run --rm -it -v $(pwd):"/ta" f29d57145d
 ```
 
+# RISCV things
+There is one in:
+/home/iman/xdr/
+But this 1 is in path:
+/home/iman/projs/
+
 ## DISEMMINATION
 [Seventh Workshop on Computer Architecture Research with RISC-V (CARRV 2023)](https://carrv.github.io/2023/)
 USENIX ATC? (The home of the legendary QEMU paper)

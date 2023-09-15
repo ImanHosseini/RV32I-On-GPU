@@ -44,8 +44,8 @@ SECTIONS
 {
     /* /DISCARD/ 0 (NOLOAD) : {*(.eh_frame)} */
     __global_pointer$ = .;
-    .cuda_constant 0x0 : {*(.lib_constant) *(.cuda_constant) *(.text) *(.text.*) *(.rodata) *(.rodata.*) *(.srodata.*) *(.srodata.*) *(.fdata)} :cuda_constant
+    .cuda_constant 0x0 : ALIGN(1) {*(.lib_constant) *(.cuda_constant) *(.text) *(.text.*) *(.rodata) *(.rodata.*) *(.srodata.*) *(.srodata.*) *(.fdata)} :cuda_constant
     _edata = .; PROVIDE (edata = .);
-    .cuda_global . : {*(.cuda_global) *(.pkt) *(.sdata) *(.fini_array) *(.init_array) *(.init_array.*) *(.sdata.*) *(.bss) *(.bss.*) *(.sbss) *(.sbss.*) *(.data.*) *(.eh_frame) *(*)} :cuda_global
+    .cuda_global . : ALIGN(1) {*(.cuda_global) *(.pkt) *(.sdata) *(.fini_array) *(.init_array) *(.init_array.*) *(.sdata.*) *(.bss) *(.bss.*) *(.sbss) *(.sbss.*) *(.data.*) *(.eh_frame) *(*)} :cuda_global
     _end = .; PROVIDE (end = .);
 }
