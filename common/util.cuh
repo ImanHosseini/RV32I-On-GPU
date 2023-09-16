@@ -66,6 +66,7 @@ typedef uint32_t REG;
     X(ILG_MEMWR_RO)         \
     X(BAD_INST)             \
     X(ECALL)                \
+    X(ERTN)                 \
     X(BKPT)
 
 // Create the enum

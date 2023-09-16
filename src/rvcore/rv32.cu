@@ -134,6 +134,9 @@ __device__ bool read16(uint32_t addr_, uint16_t &value, uint8_t *mem, core_statu
 
 __device__ bool read32(uint32_t addr_, uint32_t &value, uint8_t *mem, core_status_t &cstatus)
 {
+    if(addr_ == 0x34e0) {
+        printf("RD FROM: %x\n", addr_);
+    }
     if ((addr_ + 3) < cro_size)
     {
         value = *((uint32_t *)(cmem + addr_));
@@ -191,6 +194,9 @@ __device__ bool write16(uint32_t addr_, uint16_t value, uint8_t *mem, core_statu
 
 __device__ bool write32(uint32_t addr_, uint32_t value, uint8_t *mem, core_status_t &cstatus)
 {
+    if(addr_ == 0x34e0) {
+        printf("WR32 TO: %x\n", addr_);
+    }
     if ((addr_ + 3) < cro_size)
     {
         cstatus.state = ILG_MEMWR_RO;
@@ -221,22 +227,26 @@ __device__ bool write32(uint32_t addr_, uint32_t value, uint8_t *mem, core_statu
     li    a7, 93              # exit syscall number
 */
 
-__device__ inline void shandler(core_status_t &cstatus, REG *regs)
-{
-    switch (cstatus.addr)
-    {
-    case SYS_exit:
-    {
-        cstatus.state = EXITED;
-        cstatus.addr = regs[10];
-        return;
-    }
-    default:
-    {
-        return;
-    }
-    }
-}
+// __device__ inline void shandler(core_status_t &cstatus, REG *regs)
+// {
+//     switch (cstatus.addr)
+//     {
+//     case SYS_exit:
+//     {
+//         cstatus.state = EXITED;
+//         cstatus.addr = regs[10];
+//         return;
+//     }
+//     case SYS_fstat:
+//     {
+//         cstatus.state = ECALL;
+//     }
+//     default:
+//     {
+//         return;
+//     }
+//     }
+// }
 
 void set_cms(int32_t *cms)
 {
@@ -555,7 +565,7 @@ __device__ inline void stepN(REG *regs, REG &pc, uint8_t *mem, int tid, core_sta
 
 other:
     insn_masked = insn & 0x0000707f;
-    // DPRINTK("XXX %#x, %#x\n", insn, insn_masked);
+    DPRINTK("XXX %#x, %#x\n", insn, insn_masked);
     switch (insn_masked)
     {
     case 0x00000013:
@@ -850,7 +860,7 @@ other:
         DPRINTK("ebreak\n");
         cstatus.state = EBREAK;
         cstatus.addr = pc;
-        return;
+        asm("exit;");   
     }
     case 0x00000073:
     {
@@ -858,7 +868,7 @@ other:
         DPRINTK("ecall with x17/a7=%d\n", regs[17]);
         cstatus.state = ECALL;
         cstatus.addr = regs[17];
-        return;
+        asm("exit;");
     }
     }
 
@@ -935,6 +945,10 @@ __launch_bounds__(32)
     uint16_t &bhsh = *(bhshmap + tid);
     uint8_t *covmap = gcovmap + tid * MAP_SIZE;
 #endif
+    if (cstatus.state == ERTN) {
+        cstatus.state = RUNNING;
+        INC_PC
+    }
     if (cstatus.state == MAXSTEP)
     {
         cstatus.state = RUNNING;

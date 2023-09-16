@@ -31,6 +31,9 @@ spike --isa=rv32imafc -d /opt/riscv/riscv32-unknown-elf/bin/pk t2
 docker run --rm -it -v $(pwd):"/ta" f29d57145d
 ```
 
+# Managed0
+SYSCALL-level -> can do write. 
+
 # RISCV things
 There is one in:
 /home/iman/xdr/
