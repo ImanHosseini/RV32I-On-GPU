@@ -1,4 +1,5 @@
 # CRV2
+Can we emulate RISC-V (RV32IM) cores in parallel on GPU? With syscall and stuff.  
 ## Prereq
 ### RISCV stuff
 https://github.com/riscv-collab/riscv-gnu-toolchain </br>
